@@ -22,6 +22,10 @@ public class Jordinator
         deplacement.reculer(17);
         deplacement.rotationDroite(90);
         deplacement.rotationGauche(90);
+        deplacement.arcArriereDroite();
+        deplacement.arcArriereGauche();
+        deplacement.arcAvantDroite();
+        deplacement.arcAvantGauche();
         System.out.println("Fin des deplacements");
         Delay.msDelay(5000);
         g.clear();

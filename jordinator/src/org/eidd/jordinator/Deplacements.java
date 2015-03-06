@@ -62,4 +62,17 @@ public class Deplacements {
 	public void rotationDroite(double angle) {
 		robot.rotate(-angle);
 	}
+	
+	public void arcAvantGauche() {
+		robot.steer(50, 90);
+	}
+	public void arcAvantDroite() {
+		robot.steer(-50, 90);
+	}
+	public void arcArriereGauche() {
+		robot.steer(50, -90);
+	}
+	public void arcArriereDroite() {
+		robot.steer(-50, -90);
+	}
 }

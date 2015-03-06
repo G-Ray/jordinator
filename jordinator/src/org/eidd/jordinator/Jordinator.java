@@ -9,15 +9,21 @@ public class Jordinator
 {
     public static void main(String[] args)
     {
-        //System.out.println("Running...");
         GraphicsLCD g = BrickFinder.getDefault().getGraphicsLCD();
         final int SW = g.getWidth();
         final int SH = g.getHeight();
-        Button.LEDPattern(5);
+        Button.LEDPattern(5); //Rouge clignotant
 
         g.setFont(Font.getLargeFont());
         g.drawString("Jordinator", SW/2, SH/2, GraphicsLCD.BASELINE|GraphicsLCD.HCENTER);
-        Delay.msDelay(4000);
+
+        Deplacements deplacement = new Deplacements();
+        deplacement.avancer(17);
+        deplacement.reculer(17);
+        deplacement.rotationDroite(90);
+        deplacement.rotationGauche(90);
+        System.out.println("Fin des deplacements");
+        Delay.msDelay(5000);
         g.clear();
         g.refresh();
     }

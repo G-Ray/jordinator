@@ -62,17 +62,17 @@ public class Deplacements {
 	public void rotationDroite(double angle) {
 		robot.rotate(-angle);
 	}
-	
-	public void arcAvantGauche() {
-		robot.steer(50, 90);
+
+	public void arcAvantGauche(double turnRate) {
+		robot.steer(turnRate);
 	}
-	public void arcAvantDroite() {
-		robot.steer(-50, 90);
+	public void arcAvantDroite(double turnRate) {
+		robot.steer(-turnRate);
 	}
-	public void arcArriereGauche() {
-		robot.steer(50, -90);
+	public void arcArriereGauche(double turnRate) {
+		robot.steerBackward(turnRate);
 	}
-	public void arcArriereDroite() {
-		robot.steer(-50, -90);
+	public void arcArriereDroite(double turnRate) {
+		robot.steerBackward(-turnRate);
 	}
 }

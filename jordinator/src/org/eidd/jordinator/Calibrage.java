@@ -17,8 +17,7 @@ public class Calibrage {
 		try {
 			
 			boolean again = true;
-			
-			
+
 			Port port = LocalEV3.get().getPort("S4");
 			EV3ColorSensor colorSensor = new EV3ColorSensor(port);
 			SampleProvider average = new MeanFilter(colorSensor.getRGBMode(), 1);

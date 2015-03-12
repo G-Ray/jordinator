@@ -2,8 +2,6 @@ package org.eidd.jordinator;
 
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.Font;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.Color;
@@ -133,7 +131,6 @@ public class Calibrage {
 					again = false;
 				}
 			}
-			
 			
 		} catch (Throwable t) {
 			t.printStackTrace();

@@ -17,6 +17,11 @@ public class Jordinator
         g.setFont(Font.getLargeFont());
         g.drawString("Jordinator", SW/2, SH/2, GraphicsLCD.BASELINE|GraphicsLCD.HCENTER);
 
+        /* On commence par calibrer les couleurs */
+
+        /* On creer un état de jeu initial */
+
+        /* Tests des déplacements standard */
         Deplacements deplacement = new Deplacements();
         deplacement.avancer(17);
         deplacement.reculer(17);

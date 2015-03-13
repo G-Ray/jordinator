@@ -32,9 +32,14 @@ public class Jordinator
         deplacement.arcArriereDroite(100);
         deplacement.arcArriereGauche(100);*/
         
-        Pinces p = new Pinces();
+        /*Pinces p = new Pinces();
         p.pincer();
-        p.ouvrir();
+        p.ouvrir();*/
+        Couleurs c = new Couleurs();
+        c.calibrate();
+        Button.ENTER.waitForPressAndRelease();
+        System.out.println(c.getCouleur());
+        Delay.msDelay(5000);
 
         g.clear();
         g.refresh();

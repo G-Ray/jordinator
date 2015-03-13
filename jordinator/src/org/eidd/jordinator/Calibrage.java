@@ -20,12 +20,11 @@ public class Calibrage {
 			EV3ColorSensor colorSensor = new EV3ColorSensor(port);
 			SampleProvider average = new MeanFilter(colorSensor.getRGBMode(), 1);
 			colorSensor.setFloodlight(Color.WHITE);
-			
+
 			System.out.println("Press enter to calibrate blue...");
 			Button.ENTER.waitForPressAndRelease();
 			float[] blue = new float[average.sampleSize()];
 			average.fetchSample(blue, 0);
-			
 			
 			System.out.println("Press enter to calibrate red...");
 			Button.ENTER.waitForPressAndRelease();

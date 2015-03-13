@@ -22,7 +22,7 @@ public class Jordinator
         /* On creer un état de jeu initial */
 
         /* Tests des déplacements standard */
-        Deplacements deplacement = new Deplacements();
+        /*Deplacements deplacement = new Deplacements();
         deplacement.avancer(17);
         deplacement.reculer(17);
         deplacement.rotationDroite(90);
@@ -30,9 +30,12 @@ public class Jordinator
         deplacement.arcAvantDroite(100);
         deplacement.arcAvantGauche(100);
         deplacement.arcArriereDroite(100);
-        deplacement.arcArriereGauche(100);
+        deplacement.arcArriereGauche(100);*/
+        
+        Pinces p = new Pinces();
+        p.pincer();
+        p.ouvrir();
 
-        Delay.msDelay(5000);
         g.clear();
         g.refresh();
     }

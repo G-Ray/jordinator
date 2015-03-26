@@ -5,7 +5,7 @@ import lejos.hardware.motor.Motor;
 import lejos.robotics.RegulatedMotor;
 
 /**
- * Classe pour tous les deplacements
+ * Classe pour les actions des pinces
  * @author Geoffrey et Komel
  *
  */

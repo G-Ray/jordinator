@@ -12,19 +12,29 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.PublishFilter;
 
 public class Distance {
-	public static void main(String[] args) throws IOException {
-		float frequency = 1; // 1 sample per second
+
+	public static double distance = 999;
+	float frequency = 1; // 1 sample per second
+	float[] sample;
+	SampleProvider sp;
+
+	public Distance() throws IOException {
 		EV3UltrasonicSensor sonicSensor = new EV3UltrasonicSensor(SensorPort.S2);
-		SampleProvider sp = new PublishFilter(sonicSensor.getDistanceMode(), "Ultrasonic readings", frequency);
-		float[] sample = new float[sp.sampleSize()];
-		while(Button.ESCAPE.isUp()) {
-		
-			sp.fetchSample(sample, 0);
-			LCD.clear(4);
-			LCD.drawString("Distance: " + sample[0],0,4);
-			
+		sp = new PublishFilter(sonicSensor.getDistanceMode(), "Ultrasonic readings", frequency);
+		sample = new float[sp.sampleSize()];
+
+		//sonicSensor.close();
+		DistanceThread dt = new DistanceThread();
+		dt.start();
+	}
+	
+	private class DistanceThread extends Thread {
+		public void run() {
+			while(true){
+				sp.fetchSample(sample, 0);
+				System.out.println(distance);
+				distance = sample[0];
+			} 
 		}
-		
-		sonicSensor.close();
 	}
 }

@@ -18,23 +18,32 @@ public class Couleurs {
 	private static float[] white;
 	private static float[] grey;
 	SampleProvider average;
+	Port port;
+	EV3ColorSensor colorSensor;
+	private String color = "";
 
 	public Couleurs() {
-		
+		port = LocalEV3.get().getPort(Config.PORT_COLOR);
+		colorSensor = new EV3ColorSensor(port);
+		average = new MeanFilter(colorSensor.getRGBMode(), 1);
+		ColorThread thread = new ColorThread();
+		calibrate();
+		thread.start();
+	}
+
+	public String getColor() {
+		return color;
 	}
 
 	public void calibrate() {
 		try {
-			Port port = LocalEV3.get().getPort(Config.PORT_COLOR);
-			EV3ColorSensor colorSensor = new EV3ColorSensor(port);
-			average = new MeanFilter(colorSensor.getRGBMode(), 1);
 			colorSensor.setFloodlight(Color.WHITE);
 
 			System.out.println("Press enter to calibrate blue...");
 			Button.ENTER.waitForPressAndRelease();
 			blue = new float[average.sampleSize()];
 			average.fetchSample(blue, 0);
-			
+
 			System.out.println("Press enter to calibrate red...");
 			Button.ENTER.waitForPressAndRelease();
 			red = new float[average.sampleSize()];
@@ -64,7 +73,7 @@ public class Couleurs {
 			Button.ENTER.waitForPressAndRelease();
 			grey = new float[average.sampleSize()];
 			average.fetchSample(grey, 0);
-			colorSensor.close();
+			//colorSensor.close();
 			
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -73,12 +82,14 @@ public class Couleurs {
 		}
 	}
 	
-	public String getCouleur() {
-		float[] sample = new float[average.sampleSize()];
-		average.fetchSample(sample, 0);
+	public String computeColor() {
+		SampleProvider sp = new MeanFilter(colorSensor.getRGBMode(), 1);
+
+		float[] sample = new float[sp.sampleSize()];
+		sp.fetchSample(sample, 0);
 		double minscal = Double.MAX_VALUE;
 		String color = "";
-		
+
 		double scalaire = this.scalaire(sample, blue);
 
 		if (scalaire < minscal) {
@@ -121,44 +132,53 @@ public class Couleurs {
 			minscal = scalaire;
 			color = "grey";
 		}
-		
+
 		System.out.println("The color is " + color + " \n");
 
 		return color;
 	}
 
 	public boolean estBleu() {
-		return(this.getCouleur().equals("blue"));
+		return(this.computeColor().equals("blue"));
 	}
 
 	public boolean estRouge() {
-		return(this.getCouleur().equals("red"));
+		return(this.computeColor().equals("red"));
 	}
 
 	public boolean estVert() {
-		return(this.getCouleur().equals("green"));
+		return(this.computeColor().equals("green"));
 	}
 
 	public boolean estJaune() {
-		return(this.getCouleur().equals("yellow"));
+		return(this.computeColor().equals("yellow"));
 	}
 
 	public boolean estNoir() {
-		return(this.getCouleur().equals("black"));
+		return(this.computeColor().equals("black"));
 	}
 
-	public boolean estBlac() {
-		return(this.getCouleur().equals("white"));
+	public boolean estBlanc() {
+		return(this.computeColor().equals("white"));
 	}
 
 	public boolean estGris() {
-		return(this.getCouleur().equals("grey"));
+		return(this.computeColor().equals("grey"));
 	}
 	
 	private double scalaire(float[] v1, float[] v2) {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +
 				Math.pow(v1[2] - v2[2], 2.0));
+	}
+
+	private class ColorThread extends Thread {
+		//Deplacements d = new Deplacements();
+		public void run() {
+			while(true){
+				color = computeColor();
+			} 
+		}
 	}
 
 }

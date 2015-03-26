@@ -34,12 +34,43 @@ public class Jordinator
         
         /*Pinces p = new Pinces();
         p.pincer();
-        p.ouvrir();*/
+        p.ouvrir();
         Couleurs c = new Couleurs();
         c.calibrate();
-        Button.ENTER.waitForPressAndRelease();
-        System.out.println(c.getCouleur());
-        Delay.msDelay(5000);
+
+        String couleur = c.getCouleur();*/
+        g.clear();
+        g.refresh();
+
+       // Couleurs c = new Couleurs();
+        //c.calibrate();
+        Deplacements deplacement = new Deplacements();
+
+        // Main  game loop
+        boolean end = false;
+        /*while(!end) {
+        	deplacement.avancer(5); // on avance de 5 cm
+        	if(c.getColor().equals("blue"))
+        		end = true;
+        }*/
+        //deplacement.avancer(70000);
+
+        //Delay.msDelay(5000);
+        deplacement.avancer(5000);
+        /*while(c.getColor() != "blue");
+        deplacement.stop();
+        deplacement.rotationGauche(90);
+        deplacement.avancer(500000);
+
+        while(c.getColor() != "yellow");
+        deplacement.stop();
+        deplacement.rotationGauche(90);
+        deplacement.avancer(500000);
+
+        while(c.getColor() != "white");
+        deplacement.stop();*/
+        while(Distance.distance>0.5);
+        deplacement.stop();
 
         g.clear();
         g.refresh();

@@ -69,6 +69,7 @@ public class Jordinator
 
         while(c.getColor() != "white");
         deplacement.stop();*/
+        Distance.init();
         while(Distance.distance>0.5);
         deplacement.stop();
 

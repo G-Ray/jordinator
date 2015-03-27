@@ -176,7 +176,12 @@ public class Couleurs {
 		//Deplacements d = new Deplacements();
 		public void run() {
 			while(true){
+				Coordonnee coor= new Coordonnee();
 				color = computeColor();
+				coor.Coordonne(color);
+				System.out.println(coor.getX());
+				System.out.println(coor.getX());
+				
 			} 
 		}
 	}

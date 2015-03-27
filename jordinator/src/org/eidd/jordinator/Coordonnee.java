@@ -5,10 +5,10 @@ public class  Coordonnee {
 	//Coordonnees en cm
 	public int x = 0;
 	public int y = 50;
-	private final int X_MAX = 220;
-	private final int Y_MAX = 200;
+	//private final int X_MAX = 220;
+	//private final int Y_MAX = 200;
 	
-	public Coordonnee(String sample){
+	public void update_coor(String sample){
 		
 		if(sample=="red"){
 		    y=50;

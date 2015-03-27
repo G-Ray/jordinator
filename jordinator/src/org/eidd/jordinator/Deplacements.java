@@ -15,12 +15,12 @@ public class Deplacements {
 
 	private static RegulatedMotor leftMotor;
 	private static RegulatedMotor rightMotor;
-	private float wheelDiameter;
-	private float trackWidth;
-	boolean reverse;
+	private static float wheelDiameter;
+	private static float trackWidth;
+	static boolean reverse;
 	private static DifferentialPilot robot;
 
-	public Deplacements() {
+	public static void init() {
     	PilotProps pp = new PilotProps();
     	try {
 			pp.loadPersistentValues();
@@ -47,36 +47,39 @@ public class Deplacements {
 		robot.setRotateSpeed(45); // deg/sec
 	}
 	
-	public void avancer(double distance) {
+	public static void avancer(double distance) {
 		robot.travel(distance, true);
 	}
 
-	public void reculer(double distance) {
+	public static void reculer(double distance) {
 		robot.travel(-distance);
 	}
 	
-	public void stop() {
+	public static void stop() {
 		robot.stop();
 	}
 	
-	public void rotationGauche(double angle) {
+	public static void rotationGauche(double angle) {
 		robot.rotate(angle);
 	}
 
-	public void rotationDroite(double angle) {
+	public static void rotationDroite(double angle) {
 		robot.rotate(-angle);
 	}
 
-	public void arcAvantGauche(double turnRate) {
+	public static void arcAvantGauche(double turnRate) {
 		robot.steer(turnRate);
 	}
-	public void arcAvantDroite(double turnRate) {
+
+	public static void arcAvantDroite(double turnRate) {
 		robot.steer(-turnRate);
 	}
-	public void arcArriereGauche(double turnRate) {
+
+	public static void arcArriereGauche(double turnRate) {
 		robot.steerBackward(turnRate);
 	}
-	public void arcArriereDroite(double turnRate) {
+
+	public static void arcArriereDroite(double turnRate) {
 		robot.steerBackward(-turnRate);
 	}
 }

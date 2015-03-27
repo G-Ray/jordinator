@@ -13,17 +13,17 @@ public class Pinces {
 
 	private static RegulatedMotor pickMotor;
 
-	public Pinces() {
+	public static void init() {
 		pickMotor = Motor.A;
 		pickMotor.setAcceleration(6000);
 		pickMotor.setSpeed((int) pickMotor.getMaxSpeed());
 	}
 
-	public void pincer() {
+	public static void pincer() {
 		pickMotor.rotate(-800);
 	}
 
-	public void ouvrir() {
+	public static void ouvrir() {
 		pickMotor.rotate(800);
 	}
 

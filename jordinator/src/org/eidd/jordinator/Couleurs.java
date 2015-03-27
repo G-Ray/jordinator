@@ -32,7 +32,7 @@ public class Couleurs {
 		thread.start();
 	}
 
-	public String getColor() {
+	public static String getColor() {
 		return color;
 	}
 
@@ -148,8 +148,8 @@ public class Couleurs {
 			while(true){
 				color = computeColor();
 				coor.update_coor(color);
-				System.out.println("X: " + coor.getX());
-				System.out.println("Y: " + coor.getY());
+				//System.out.println("X: " + coor.getX());
+				//System.out.println("Y: " + coor.getY());
 				
 			} 
 		}

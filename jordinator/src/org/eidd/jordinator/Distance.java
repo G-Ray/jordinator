@@ -37,7 +37,7 @@ public class Distance {
 		public void run() {
 			while(true){
 				sp.fetchSample(sample, 0);
-				System.out.println(distance);
+				//System.out.println(distance);
 				distance = sample[0];
 			} 
 		}

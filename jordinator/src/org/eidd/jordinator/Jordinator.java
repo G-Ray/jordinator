@@ -26,7 +26,7 @@ public class Jordinator
         Deplacements.init();
         Distance.init();
         Couleurs.init();
-        Pinces.init();
+        Pinces.init();http://korben.info/
         Pinces.ouvrir();
 
         Deplacements.avancer(5000);

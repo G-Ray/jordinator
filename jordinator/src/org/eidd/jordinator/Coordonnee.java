@@ -1,13 +1,14 @@
 package org.eidd.jordinator;
 
-public class Coordonnee {
+public class  Coordonnee {
 	
-	public int x=0;
-	public int y=50;
-	int X_MAX=220;
-	int Y_MAX=200;
+	//Coordonnees en cm
+	public int x = 0;
+	public int y = 50;
+	private final int X_MAX = 220;
+	private final int Y_MAX = 200;
 	
-	public void Coordonne(String sample){
+	public Coordonnee(String sample){
 		
 		if(sample=="red"){
 		    y=50;
@@ -38,7 +39,6 @@ public class Coordonnee {
 		    }
 		}
 	}
-
 	
 	public int getX() {
 		return x;
@@ -55,8 +55,5 @@ public class Coordonnee {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-
-
 
 }

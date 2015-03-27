@@ -173,14 +173,12 @@ public class Couleurs {
 	}
 
 	private class ColorThread extends Thread {
-		//Deplacements d = new Deplacements();
 		public void run() {
 			while(true){
-				Coordonnee coor= new Coordonnee();
 				color = computeColor();
-				coor.Coordonne(color);
-				System.out.println(coor.getX());
-				System.out.println(coor.getX());
+				Coordonnee coor= new Coordonnee(color);
+				System.out.println("X: " + coor.getX());
+				System.out.println("Y: " + coor.getY());
 				
 			} 
 		}

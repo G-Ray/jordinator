@@ -21,15 +21,4 @@ public class Bouton extends EV3TouchSensor
 		return sample[0] != 0;
 	}
 
-	public static void main(String[] args)
-	{
-		Bouton touch= new Bouton(SensorPort.S1);
-		System.out.println("Appuyez sur le bouton");
-
-		while(!touch.isPressed()){
-			//On fait ce qu'on veut pendant que c'est pas touché
-			Delay.msDelay(100);
-		}
-
-	}
 }

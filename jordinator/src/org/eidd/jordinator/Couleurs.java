@@ -10,6 +10,7 @@ import lejos.robotics.filter.MeanFilter;
 import lejos.utility.Delay;
 
 public class Couleurs {
+
 	private static float[] blue;
 	private static float[] red;
 	private static float[] green;
@@ -17,12 +18,12 @@ public class Couleurs {
 	private static float[] black;
 	private static float[] white;
 	private static float[] grey;
-	SampleProvider average;
-	Port port;
-	EV3ColorSensor colorSensor;
-	private String color = "";
+	static SampleProvider average;
+	static Port port;
+	static EV3ColorSensor colorSensor;
+	private static String color = "";
 
-	public Couleurs() {
+	public static void init() {
 		port = LocalEV3.get().getPort(Config.PORT_COLOR);
 		colorSensor = new EV3ColorSensor(port);
 		average = new MeanFilter(colorSensor.getRGBMode(), 1);
@@ -35,7 +36,7 @@ public class Couleurs {
 		return color;
 	}
 
-	public void calibrate() {
+	public static void calibrate() {
 		try {
 			colorSensor.setFloodlight(Color.WHITE);
 
@@ -77,12 +78,12 @@ public class Couleurs {
 			
 		} catch (Throwable t) {
 			t.printStackTrace();
-			Delay.msDelay(10000);
+			Delay.msDelay(1000);
 			System.exit(0);
 		}
 	}
 	
-	public String computeColor() {
+	public static String computeColor() {
 		SampleProvider sp = new MeanFilter(colorSensor.getRGBMode(), 1);
 
 		float[] sample = new float[sp.sampleSize()];
@@ -90,89 +91,58 @@ public class Couleurs {
 		double minscal = Double.MAX_VALUE;
 		String color = "";
 
-		double scalaire = this.scalaire(sample, blue);
+		double scalaire = scalaire(sample, blue);
 
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "blue";
 		}
 		
-		scalaire = this.scalaire(sample, red);
+		scalaire = scalaire(sample, red);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "red";
 		}
 		
-		scalaire = this.scalaire(sample, green);
+		scalaire = scalaire(sample, green);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "green";
 		}
 		
-		scalaire = this.scalaire(sample, yellow);
+		scalaire = scalaire(sample, yellow);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "yellow";
 		}
 
-		scalaire = this.scalaire(sample, black);
+		scalaire = scalaire(sample, black);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "black";
 		}
 
-		scalaire = this.scalaire(sample, white);
+		scalaire = scalaire(sample, white);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "white";
 		}
 
-		scalaire = this.scalaire(sample, grey);
+		scalaire = scalaire(sample, grey);
 		if (scalaire < minscal) {
 			minscal = scalaire;
 			color = "grey";
 		}
-
-		System.out.println("The color is " + color + " \n");
-
 		return color;
 	}
-
-	public boolean estBleu() {
-		return(this.computeColor().equals("blue"));
-	}
-
-	public boolean estRouge() {
-		return(this.computeColor().equals("red"));
-	}
-
-	public boolean estVert() {
-		return(this.computeColor().equals("green"));
-	}
-
-	public boolean estJaune() {
-		return(this.computeColor().equals("yellow"));
-	}
-
-	public boolean estNoir() {
-		return(this.computeColor().equals("black"));
-	}
-
-	public boolean estBlanc() {
-		return(this.computeColor().equals("white"));
-	}
-
-	public boolean estGris() {
-		return(this.computeColor().equals("grey"));
-	}
 	
-	private double scalaire(float[] v1, float[] v2) {
+	private static double scalaire(float[] v1, float[] v2) {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +
 				Math.pow(v1[2] - v2[2], 2.0));
 	}
 
-	private class ColorThread extends Thread {
+	private static class ColorThread extends Thread {
 		public void run() {
 			while(true){
 				color = computeColor();

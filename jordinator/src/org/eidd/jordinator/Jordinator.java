@@ -22,27 +22,68 @@ public class Jordinator
         g.clear();
         g.refresh();
 
-        // Init sensors (start threads)
+        // Init sensors - start threads
         Deplacements.init();
         Distance.init();
         Couleurs.init();
-        Pinces.init();http://korben.info/
-        Pinces.ouvrir();
+        Pinces.init();
+        //Pinces.ouvrir();
 
-        Deplacements.avancer(5000);
-        while(Distance.distance > 30);
-        System.out.println("Palais droit devant");
-        Port p = LocalEV3.get().getPort(Config.PORT_BUTTON);
-        Bouton b = new Bouton(p);
-
-        while(!b.isPressed());
-
-        Pinces.pincer();
-
-        while(Couleurs.getColor() != "white");
-        Deplacements.stop();
+        int[][] plateau = new int[][]{
+    		  { 0, 0, 0, 0, 0},
+    		  { 0, 1, 1, 1, 0},
+    		  { 0, 1, 1, 1, 0},
+    		  { 0, 1, 1, 1, 0},
+    		  { 0, 0, 0, 0, 0}
+    		};
         
-        b.close();
+        int[][] visites = new int[][]{
+      		  { 0, 0, 0, 0, 0},
+      		  { 0, 0, 0, 0, 0},
+      		  { 0, 0, 0, 0, 0},
+      		  { 0, 0, 0, 0, 0},
+      		  { 0, 0, 0, 0, 0}
+      		};
+        
+        int x = 0;
+        int y = 1;
+
+        while(true) {
+        	boolean parcouru = true;
+
+        	for(int i=0; i<5; i++)
+        		for(int j=0; j<5; j++)
+        			if(visites[i][j] == 0) {
+        				parcouru = false;
+        				break;
+        			}
+        	
+        	if (parcouru == true) {
+        		System.out.println("PARCOURT TERMINE");
+        		break;
+        	}
+
+        	visites[x][y] = 1;
+
+	        //Deplacements.avancer(50);
+	        x = Coordonnee.x;
+	        y = Coordonnee.y;
+	        g.clear();
+	        g.refresh();
+	        Delay.msDelay(1000);
+	        System.out.println(x + ":" + y);
+	        /*while(Distance.distance > 30);
+	        System.out.println("Palais droit devant");
+	        Port p = LocalEV3.get().getPort(Config.PORT_BUTTON);
+	        Bouton b = new Bouton(p);
+	
+	        while(!b.isPressed());
+	        Pinces.pincer();
+	        while(Couleurs.getColor() != "white");*/
+	        //Deplacements.stop();
+        }
+
+        //b.close();
         g.clear();
         g.refresh();
     }

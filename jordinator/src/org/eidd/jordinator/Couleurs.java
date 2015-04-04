@@ -150,7 +150,6 @@ public class Couleurs {
 				coor.update_coor(color);
 				//System.out.println("X: " + coor.getX());
 				//System.out.println("Y: " + coor.getY());
-				
 			} 
 		}
 	}

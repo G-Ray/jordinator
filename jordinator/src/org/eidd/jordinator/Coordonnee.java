@@ -3,41 +3,39 @@ package org.eidd.jordinator;
 public class  Coordonnee {
 	
 	//Coordonnees en cm
-	public int x = 0;
-	public int y = 50;
-	//private final int X_MAX = 220;
-	//private final int Y_MAX = 200;
+	public static int x = 0;
+	public static int y = 1;
 	
 	public void update_coor(String sample){
 		
-		if(sample=="red"){
-		    y=50;
+		if(sample == "red"){
+		    y=1;
 		}
-		else if(sample=="yellow"){
-		    y=150;    
+		else if(sample == "yellow"){
+		    y=3;
 		}
-		else if(sample=="green"){
-		    x=60;
+		else if(sample == "green"){
+		    x=1;
 		}
-		else if(sample=="blue"){
-		    x=180;
+		else if(sample == "blue"){
+		    x=3;
 		}
-		else if(sample=="white"){
-		    if(x<120){
-		        x=0;
+		else if(sample == "white"){
+		    if(x<4){
+		        x = 0;
 		    }else{
-		        x=220;
+		        x = 4;
 		    }
 		}
-		else if(sample=="black"){
-		    if(x<110){
-		        y=100;
-		    }else if(x>110){
-		        y=100;
+		/*else if(sample == "black"){
+		    if(x<2){
+		        y=2;
+		    }else if(x>2){
+		        y=2;
 		    }else{
-		        x=120;
+		        x=2;
 		    }
-		}
+		}*/
 	}
 	
 	public int getX() {

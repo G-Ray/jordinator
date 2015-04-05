@@ -15,10 +15,8 @@ public class Jordinator
         final int SW = g.getWidth();
         final int SH = g.getHeight();
         Button.LEDPattern(5); //Rouge clignotant
-
         g.setFont(Font.getLargeFont());
         g.drawString("Jordinator", SW/2, SH/2, GraphicsLCD.BASELINE|GraphicsLCD.HCENTER);
-        Delay.msDelay(2000);
         g.clear();
         g.refresh();
 
@@ -27,7 +25,6 @@ public class Jordinator
         Distance.init();
         Couleurs.init();
         Pinces.init();
-        //Pinces.ouvrir();
 
         int[][] plateau = new int[][]{
     		  { 0, 0, 0, 0, 0},
@@ -44,9 +41,15 @@ public class Jordinator
       		  { 0, 0, 0, 0, 0},
       		  { 0, 0, 0, 0, 0}
       		};
-        
+
         int x = 0;
         int y = 1;
+
+        /*
+         * prochaines coordonnees à visiter
+         * Obstacle detecté => calculer un autre chemin
+         * palais détecté => Prendre le palais
+         */
 
         while(true) {
         	boolean parcouru = true;
@@ -57,33 +60,15 @@ public class Jordinator
         				parcouru = false;
         				break;
         			}
-        	
+
         	if (parcouru == true) {
         		System.out.println("PARCOURT TERMINE");
         		break;
         	}
 
         	visites[x][y] = 1;
-
-	        //Deplacements.avancer(50);
-	        x = Coordonnee.x;
-	        y = Coordonnee.y;
-	        g.clear();
-	        g.refresh();
-	        Delay.msDelay(1000);
-	        System.out.println(x + ":" + y);
-	        /*while(Distance.distance > 30);
-	        System.out.println("Palais droit devant");
-	        Port p = LocalEV3.get().getPort(Config.PORT_BUTTON);
-	        Bouton b = new Bouton(p);
-	
-	        while(!b.isPressed());
-	        Pinces.pincer();
-	        while(Couleurs.getColor() != "white");*/
-	        //Deplacements.stop();
         }
 
-        //b.close();
         g.clear();
         g.refresh();
     }

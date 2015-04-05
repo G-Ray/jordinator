@@ -7,7 +7,6 @@ import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-
 import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.PublishFilter;
 
@@ -37,8 +36,8 @@ public class Distance {
 		public void run() {
 			while(true){
 				sp.fetchSample(sample, 0);
-				//System.out.println(distance);
 				distance = sample[0];
+				if(distance < 15); //Obstacle détecté
 			} 
 		}
 	}

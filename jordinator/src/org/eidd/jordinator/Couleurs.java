@@ -144,12 +144,9 @@ public class Couleurs {
 
 	private static class ColorThread extends Thread {
 		public void run() {
-			Coordonnee coor = new Coordonnee();
 			while(true){
 				color = computeColor();
-				coor.update_coor(color);
-				//System.out.println("X: " + coor.getX());
-				//System.out.println("Y: " + coor.getY());
+				Coordonnee.update_coor(color);
 			} 
 		}
 	}

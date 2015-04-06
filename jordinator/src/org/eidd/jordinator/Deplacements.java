@@ -52,7 +52,7 @@ public class Deplacements {
 	}
 
 	public static void reculer(double distance) {
-		robot.travel(-distance);
+		robot.travel(-distance, true);
 	}
 	
 	public static void stop() {

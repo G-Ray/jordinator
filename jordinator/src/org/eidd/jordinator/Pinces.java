@@ -13,8 +13,10 @@ import lejos.robotics.RegulatedMotor;
 public class Pinces {
 
 	private static RegulatedMotor pickMotor;
+	public static boolean capture;
 
 	public static void init() {
+		capture = false;
 		pickMotor = Motor.A;
 		pickMotor.setAcceleration(6000);
 		pickMotor.setSpeed((int) pickMotor.getMaxSpeed());
@@ -24,10 +26,12 @@ public class Pinces {
 
 	public static void pincer() {
 		pickMotor.rotate(-800);
+		capture = true;
 	}
 
 	public static void ouvrir() {
 		pickMotor.rotate(800);
+		capture = false;
 	}
 
 	/*

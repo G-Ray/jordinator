@@ -135,7 +135,7 @@ public class Couleurs {
 		}
 		return color;
 	}
-	
+
 	private static double scalaire(float[] v1, float[] v2) {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +

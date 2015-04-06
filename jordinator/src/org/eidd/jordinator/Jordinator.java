@@ -48,12 +48,11 @@ public class Jordinator
         /*
          * prochaines coordonnees à visiter
          * Obstacle detecté => calculer un autre chemin
-         * palais détecté => Prendre le palais
+         * palais détecté => prendre le chemin le plus court
          */
 
         while(true) {
         	boolean parcouru = true;
-
         	for(int i=0; i<5; i++)
         		for(int j=0; j<5; j++)
         			if(visites[i][j] == 0) {
@@ -61,15 +60,32 @@ public class Jordinator
         				break;
         			}
 
+        	//On a visité tous les noeuds
         	if (parcouru == true) {
         		System.out.println("PARCOURT TERMINE");
         		break;
         	}
+
+        	//choisir le palais le plus près
+        	//si pas de palais, MAJ visites et recommencer
+        	//si palais, alors on marqu
+        	if(Pinces.capture); // aller marquer
+        	if(Distance.obstacle); //Recalculer chemin
 
         	visites[x][y] = 1;
         }
 
         g.clear();
         g.refresh();
+    }
+
+    public void marquer() {
+    	//calculer le chemin vers le but le plus court
+    	//y aller
+    }
+
+    //se debrouille pour aller à des coordonnées spécifiques
+    public void allerVers() {
+    	
     }
 }

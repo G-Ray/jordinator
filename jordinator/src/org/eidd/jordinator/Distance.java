@@ -12,12 +12,14 @@ import lejos.robotics.filter.PublishFilter;
 
 public class Distance {
 
+	public static boolean obstacle;
 	public static double distance = 999;
-	static float frequency = 1; // 1 sample per second
+	static float frequency =  2;// 2 sample per second
 	static float[] sample;
 	static SampleProvider sp;
 
 	public static void init() {
+		obstacle = false;
 		EV3UltrasonicSensor sonicSensor = new EV3UltrasonicSensor(SensorPort.S2);
 		try {
 			sp = new PublishFilter(sonicSensor.getDistanceMode(), "Ultrasonic readings", frequency);
@@ -27,7 +29,6 @@ public class Distance {
 		}
 		sample = new float[sp.sampleSize()];
 
-		//sonicSensor.close();
 		DistanceThread dt = new DistanceThread();
 		dt.start();
 	}
@@ -37,7 +38,9 @@ public class Distance {
 			while(true){
 				sp.fetchSample(sample, 0);
 				distance = sample[0];
-				if(distance < 15); //Obstacle détecté
+
+				if(distance < 15)
+					obstacle = true;
 			} 
 		}
 	}

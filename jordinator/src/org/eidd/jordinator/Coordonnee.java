@@ -18,8 +18,7 @@ public class  Coordonnee {
 			else x=4;
 			break;
 		case "black":
-			if(x!=2) y=2;
-			else x=2;
+			if( x<1 || x>3 ) y=2;
 			break;
 		}
 	}

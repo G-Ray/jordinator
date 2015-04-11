@@ -56,7 +56,7 @@ public class Jordinator
         	boolean parcouru = true;
         	for(int i=0; i<5; i++)
         		for(int j=0; j<5; j++)
-        			if(plateau[i][j] == 1) {
+        			if(visites[i][j] == 1) {
         				parcouru = false;
         				//x=i; y=j;
         				break;
@@ -68,42 +68,10 @@ public class Jordinator
         		break;
         	}
 
-        	//choisir le palais le plus près
-        	//si pas de palais, MAJ visites et recommencer
-        	//si palais, alors on marque
-        	//if(Pinces.capture); //aller marquer
-        	//if(Distance.obstacle); //Recalculer chemin
-
-        	if(x==3 && y == 1) {
-        		Deplacements.rotationGauche(77);
-        		Deplacements.avancer(50);
-        		Deplacements.rotationGauche(77);
-        		y=2;
-        	}
-        	else if(y == 1) {
-        		Deplacements.avancer(60);
-        		x++;
-        	}
-
-        	if(x==1 && y == 2) {
-        		Deplacements.rotationDroite(77);
-        		Deplacements.avancer(50);
-        		Deplacements.rotationDroite(77);
-        		y=3;
-        	}
-        	else if(y == 2) {
-        		Deplacements.avancer(60);
-        		x--;
-        	}
-
-        	if(x==3 && y == 3) {
-        		Deplacements.stop();
-        	}
-
-        	else if(y == 3) {
-        		Deplacements.avancer(60);
-        		x++;
-        	}
+        	Deplacements.suivreLigne("red", "blue");
+        	Deplacements.suivreLigne("blue", "yellow");
+        	Deplacements.suivreLigne("yellow", "green");
+        	Deplacements.suivreLigne("yellow", "black");
 
         	System.out.println(x + ":" + y);
         	plateau[x][y] = 0;

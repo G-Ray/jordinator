@@ -43,8 +43,13 @@ public class Pinces {
 			Bouton bouton = new Bouton(port);
 			while(true){
 				// on vérifie que c'est bien un palais
-				if(bouton.isPressed() && Distance.distance > 10)
+				if(Distance.distance < 25){
+					Deplacements.arcAvantGauche(30);
+				}
+
+				if(bouton.isPressed() && Distance.distance > 10) {
 					Pinces.pincer();
+				}
 			}
 		}
 	}

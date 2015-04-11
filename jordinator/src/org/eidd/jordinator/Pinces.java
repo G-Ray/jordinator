@@ -42,7 +42,7 @@ public class Pinces {
 			Port port = LocalEV3.get().getPort(Config.PORT_BUTTON);
 			Bouton bouton = new Bouton(port);
 			while(true){
-				// on ne ferme pas si ce n'est pas un palais
+				// on vérifie que c'est bien un palais
 				if(bouton.isPressed() && Distance.distance > 10)
 					Pinces.pincer();
 			}

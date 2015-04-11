@@ -42,17 +42,17 @@ public class Deplacements {
     	
     	robot = new DifferentialPilot(wheelDiameter,trackWidth,leftMotor,rightMotor,reverse);
 
-    	robot.setAcceleration(6000);
-		robot.setTravelSpeed(50); // cm/sec
-		robot.setRotateSpeed(45); // deg/sec
+    	robot.setAcceleration(2000);
+		robot.setTravelSpeed(30); // cm/sec
+		robot.setRotateSpeed(30); // deg/sec
 	}
 	
 	public static void avancer(double distance) {
-		robot.travel(distance, true);
+		robot.travel(distance);
 	}
 
 	public static void reculer(double distance) {
-		robot.travel(-distance, true);
+		robot.travel(-distance);
 	}
 	
 	public static void stop() {

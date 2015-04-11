@@ -6,6 +6,6 @@ public class Config {
 	public static String PORT_RIGHTMOTOR = "C";
 	public static String PORT_COLOR = "S4";
 	public static String PORT_BUTTON = "S1";
-	public static String WHEELDIAMETER = "5.6";
-	public static String TRACKWIDTH = "12.5"; 
+	public static String WHEELDIAMETER = "5.5";
+	public static String TRACKWIDTH = "13.3";
 }

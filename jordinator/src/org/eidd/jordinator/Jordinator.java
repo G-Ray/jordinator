@@ -5,6 +5,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.port.Port;
+import lejos.robotics.pathfinding.NavigationMesh;
 import lejos.utility.Delay;
 
 public class Jordinator
@@ -26,15 +27,15 @@ public class Jordinator
         Couleurs.init();
         Pinces.init();
 
-        int[][] plateau = new int[][]{
+        int[][] plateau = new int[][] {
     		  { 0, 0, 0, 0, 0},
     		  { 0, 1, 1, 1, 0},
     		  { 0, 1, 1, 1, 0},
     		  { 0, 1, 1, 1, 0},
     		  { 0, 0, 0, 0, 0}
     		};
-        
-        int[][] visites = new int[][]{
+
+        int[][] visites = new int[][] {
       		  { 0, 0, 0, 0, 0},
       		  { 0, 0, 0, 0, 0},
       		  { 0, 0, 0, 0, 0},
@@ -55,8 +56,9 @@ public class Jordinator
         	boolean parcouru = true;
         	for(int i=0; i<5; i++)
         		for(int j=0; j<5; j++)
-        			if(visites[i][j] == 0) {
+        			if(plateau[i][j] == 1) {
         				parcouru = false;
+        				//x=i; y=j;
         				break;
         			}
 
@@ -68,15 +70,48 @@ public class Jordinator
 
         	//choisir le palais le plus près
         	//si pas de palais, MAJ visites et recommencer
-        	//si palais, alors on marqu
-        	if(Pinces.capture); // aller marquer
-        	if(Distance.obstacle); //Recalculer chemin
+        	//si palais, alors on marque
+        	//if(Pinces.capture); //aller marquer
+        	//if(Distance.obstacle); //Recalculer chemin
 
-        	visites[x][y] = 1;
+        	if(x==3 && y == 1) {
+        		Deplacements.rotationGauche(77);
+        		Deplacements.avancer(50);
+        		Deplacements.rotationGauche(77);
+        		y=2;
+        	}
+        	else if(y == 1) {
+        		Deplacements.avancer(60);
+        		x++;
+        	}
+
+        	if(x==1 && y == 2) {
+        		Deplacements.rotationDroite(77);
+        		Deplacements.avancer(50);
+        		Deplacements.rotationDroite(77);
+        		y=3;
+        	}
+        	else if(y == 2) {
+        		Deplacements.avancer(60);
+        		x--;
+        	}
+
+        	if(x==3 && y == 3) {
+        		Deplacements.stop();
+        	}
+
+        	else if(y == 3) {
+        		Deplacements.avancer(60);
+        		x++;
+        	}
+
+        	System.out.println(x + ":" + y);
+        	plateau[x][y] = 0;
         }
 
         g.clear();
         g.refresh();
+        System.exit(0);
     }
 
     public void marquer() {
@@ -85,7 +120,11 @@ public class Jordinator
     }
 
     //se debrouille pour aller à des coordonnées spécifiques
-    public void allerVers() {
+    public void allerVers(int x, int y) {
+    	
+    }
+
+    public void bfs() {
     	
     }
 }

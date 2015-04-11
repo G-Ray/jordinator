@@ -52,7 +52,7 @@ public class Jordinator
          * palais détecté => prendre le chemin le plus court
          */
 
-        while(true) {
+        while(true) { //game loop
         	boolean parcouru = true;
         	for(int i=0; i<5; i++)
         		for(int j=0; j<5; j++)
@@ -74,7 +74,7 @@ public class Jordinator
         	Deplacements.suivreLigne("yellow", "black");
 
         	System.out.println(x + ":" + y);
-        	plateau[x][y] = 0;
+        	visites[x][y] = 1;
         }
 
         g.clear();

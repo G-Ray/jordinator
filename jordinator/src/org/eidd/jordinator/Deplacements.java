@@ -20,7 +20,7 @@ public class Deplacements {
 	static boolean reverse;
 	private static DifferentialPilot robot;
 	private static String [] lignesPleines = {"white", "green", "blue", "black"};
-	private static int orientation;
+	private static int orientation; // 0 face au but
 
 	public static void init() {
     	PilotProps pp = new PilotProps();
@@ -86,14 +86,14 @@ public class Deplacements {
 	}
 
 	public static void suivreLigne(String color, String arret) {
-		
+
 		boolean lignePleine = false;
 		for(String s : lignesPleines)
 			if(s == color)
 				lignePleine = true;
 
 		//on verifie si on doit tourner pour commencer a suivre la ligne
-		robot.travel(2);
+		/*robot.travel(2);
 		if(Couleurs.getColor() != color) {
 			int angle = 100;
 			robot.steer(150, 100, true);
@@ -107,8 +107,8 @@ public class Deplacements {
 			}
 		}
 
-		/*if(lignePleine) {
-			robot.travel(130, true);
+		if(lignePleine) {
+			robot.forward();
 			while(robot.isMoving()) {
 				if(Couleurs.getColor() == color) {
 					robot.rotate(3);
@@ -120,43 +120,43 @@ public class Deplacements {
 				}
 			}
 		}*/
+		
+		while(Couleurs.getColor() != arret) {
 
-		while(Couleurs.getColor() == color) {
-			robot.forward();
-			while(robot.isMoving()) {
-				if(Pinces.capture) {
-					Deplacements.marquer();
-					return;
-				}
-			}
-		}
-
-		if(Couleurs.getColor() == arret) //on a atteint la couleur d'arret
-			return;
-
-		while(Couleurs.getColor() != color) {
-			boolean found = false;
-			int turnRate = -50;
-			int angle = 3;
-			if(!found) {
-				robot.travel(2, true); // Essayons 2 cm plus loin
+			if(Couleurs.getColor() == color) {
+				robot.forward();
 				while(robot.isMoving()) {
-					if(Couleurs.getColor() == color) {
-						found = true;
-						break;
+					if(Pinces.capture) {
+						Deplacements.marquer();
+						return;
 					}
 				}
 			}
-			while(!found) {
-				robot.steer(turnRate, angle, true);
-				while(robot.isMoving()) {
-					if(Couleurs.getColor() == color) {
-						found = true;
-						break;
+	
+			while(Couleurs.getColor() != color) {
+				boolean found = false;
+				int turnRate = -50;
+				int angle = 2;
+				if(!found) {
+					robot.travel(2, true); // Essayons 2 cm plus loin
+					while(robot.isMoving()) {
+						if(Couleurs.getColor() == color) {
+							found = true;
+							break;
+						}
 					}
 				}
-				turnRate *= -1; //on change de sens de rotation
-				angle += 3;
+				while(!found) {
+					robot.rotate(angle, true);
+					while(robot.isMoving()) {
+						if(Couleurs.getColor() == color) {
+							found = true;
+							robot.stop();
+							break;
+						}
+					}
+					angle *=2;
+				}
 			}
 		}
 	}
@@ -167,6 +167,7 @@ public class Deplacements {
 		while(robot.isMoving()) {
 			if(Couleurs.getColor() == "white") {
 				avancer(10);
+				arcArriereDroite(120);
 				Pinces.ouvrir(); //BUT !!!
 				robot.rotate(180);
 			}

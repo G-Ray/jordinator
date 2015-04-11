@@ -2,6 +2,7 @@ package org.eidd.jordinator;
 
 import java.io.IOException;
 
+import lejos.hardware.motor.UnregulatedMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.PilotProps;
@@ -155,7 +156,7 @@ public class Deplacements {
 							break;
 						}
 					}
-					angle *=2;
+					angle *= -2;
 				}
 			}
 		}

@@ -56,9 +56,9 @@ public class Jordinator
         	boolean parcouru = true;
         	for(int i=0; i<5; i++)
         		for(int j=0; j<5; j++)
-        			if(visites[i][j] == 1) {
+        			if(visites[i][j] == 0) {
         				parcouru = false;
-        				//x=i; y=j;
+        				x=i; y=j;
         				break;
         			}
 

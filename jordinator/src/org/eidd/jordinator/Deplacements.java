@@ -99,7 +99,7 @@ public class Deplacements {
 		}
         nav.waitForStop();
 	}
-	
+
 	public static boolean isMoving() {
 		return robot.isMoving();
 	}
@@ -237,7 +237,7 @@ public class Deplacements {
 		}
 	}
 	
-	public static void marquer() {
+	/*public static void marquer() {
 		robot.rotate(-orientation); // on se remet face aux buts
 		robot.forward();
 		while(robot.isMoving()) {
@@ -250,6 +250,21 @@ public class Deplacements {
 		}
 		orientation = 180;
 		robot.stop();
+	}*/
+	public static void marquer() {
+        System.out.println("Planning path...");
+        double but_x = 180;
+        double but_y = 75;
+        try {
+			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(but_x, but_y)));
+		} catch (DestinationUnreachableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        nav.waitForStop();
+        Pinces.ouvrir();
+        robot.travel(-10);
+        robot.rotate(180);
 	}
 	
 	public static void avancerLigne() {

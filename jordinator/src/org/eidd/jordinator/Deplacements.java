@@ -2,6 +2,8 @@ package org.eidd.jordinator;
 
 import java.io.IOException;
 
+import org.jfree.chart.plot.dial.DialPointer.Pin;
+
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.geometry.Line;
 import lejos.robotics.geometry.Rectangle;
@@ -97,7 +99,26 @@ public class Deplacements {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        while(nav.isMoving()) {
+        	if(Pinces.capture)
+        	{
+        		nav.stop();
+        		marquer();
+        	}
+        	if(Distance.obstacle) {
+        		nav.stop();
+        		//nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
+        	}
+        }
         nav.waitForStop();
+	}
+	
+	public static float getX() {
+		return position.getPose().getX();
+	}
+	
+	public static float getY() {
+		return position.getPose().getY();
 	}
 
 	public static boolean isMoving() {

@@ -44,7 +44,7 @@ public class Pinces {
 			while(true){
 				// on vérifie que c'est bien un palais
 				if(Distance.distance < 25){
-					Deplacements.arcAvantGauche(30);
+					
 				}
 
 				if(bouton.isPressed() && Distance.distance > 10) {

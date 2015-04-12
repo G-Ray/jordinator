@@ -42,15 +42,7 @@ public class Jordinator
         Couleurs.init();
         Pinces.init();
 
-        int[][] plateau = new int[][] {
-    		  { 0, 0, 0, 0, 0},
-    		  { 0, 1, 1, 1, 0},
-    		  { 0, 1, 1, 1, 0},
-    		  { 0, 1, 1, 1, 0},
-    		  { 0, 0, 0, 0, 0}
-    		};
-
-        int[][] visites = new int[][] {
+        float[][] visites = new float[][] {
       		  { 0, 0, 0, 0, 0},
       		  { 0, 0, 0, 0, 0},
       		  { 0, 0, 0, 0, 0},
@@ -60,8 +52,7 @@ public class Jordinator
 
         float target_x = 0;
         float target_y = 1;
-        int x = 0;
-        int y = 1; //red
+
         //TODO demander dans quel camp on commence
         if(Couleurs.getColor() == "black") y = 2;
         if(Couleurs.getColor() == "yellow") y = 3;
@@ -76,16 +67,15 @@ public class Jordinator
         				target_y = j;
         				break;
         			}
-        	
+
         	//On a visité toutes les positions des palais
         	if (parcouru == true) {
         		System.out.println("Parcourt termine");
         		break;
         	}
 
-        	//target_x = 60;
-        	//target_y = 50;
-        	Deplacements.goTo(60, 50);
+        	System.out.println("target " + target_x + ":" + target_y);
+        	Deplacements.goTo(target_x, target_y);
 
         	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
@@ -103,11 +93,9 @@ public class Jordinator
         		}
         	}*/
         	
+        	x = (int) Deplacements.getX();
+        	y = (int) Deplacements.getY();
 
-        	x = Coordonnee.x;
-        	y = Coordonnee.y;
-
-        	System.out.println(x + ":" + y);
         	visites[x][y] = 1;
         }
 

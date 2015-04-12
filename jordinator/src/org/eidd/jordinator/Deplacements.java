@@ -1,11 +1,22 @@
 package org.eidd.jordinator;
 
-import java.awt.Color;
 import java.io.IOException;
 
-import lejos.hardware.motor.UnregulatedMotor;
 import lejos.robotics.RegulatedMotor;
+import lejos.robotics.geometry.Rectangle;
+import lejos.robotics.localization.OdometryPoseProvider;
+import lejos.robotics.localization.PoseProvider;
+import lejos.robotics.mapping.LineMap;
+import lejos.robotics.navigation.DestinationUnreachableException;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Pose;
+import lejos.robotics.navigation.Waypoint;
+import lejos.robotics.pathfinding.AstarSearchAlgorithm;
+import lejos.robotics.pathfinding.FourWayGridMesh;
+import lejos.robotics.pathfinding.NodePathFinder;
+import lejos.robotics.pathfinding.Path;
+import lejos.robotics.pathfinding.ShortestPathFinder;
 import lejos.utility.PilotProps;
 
 /**
@@ -23,6 +34,9 @@ public class Deplacements {
 	private static DifferentialPilot robot;
 	private static String [] lignesPleines = {"white", "green", "blue", "black"};
 	public static int orientation; // 0 face au but
+	private static Navigator nav;
+	private static NodePathFinder npf;
+	private static PoseProvider position;
 
 	public static void init() {
     	PilotProps pp = new PilotProps();
@@ -49,6 +63,35 @@ public class Deplacements {
     	robot.setAcceleration(2000);
 		robot.setTravelSpeed(30); // cm/sec
 		robot.setRotateSpeed(30); // deg/sec
+		
+		
+    	//Line [] lines = new Line[] {};
+    	Rectangle rec = new Rectangle(0, 0, 300, 250);
+    	LineMap map = new LineMap(null, rec);
+    	FourWayGridMesh mesh = new FourWayGridMesh(map, 10, 5);
+    	AstarSearchAlgorithm astar = new AstarSearchAlgorithm();
+    	npf = new NodePathFinder(astar, mesh);
+    	//ShortestPathFinder spf = new ShortestPathFinder(null);
+
+    	Pose start = new Pose(1, 1, 1);
+    	Waypoint end = new Waypoint(60, 50);
+    	Path path = null;
+
+	    position = new OdometryPoseProvider(robot);
+
+        nav = new Navigator(robot, position);
+        
+	}
+	
+	public static void goTo(double x, double y) {
+        System.out.println("Planning path...");
+        try {
+			nav.followPath(npf.findRoute(position.getPose(), new Waypoint(x, y)));
+		} catch (DestinationUnreachableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        nav.waitForStop();
 	}
 	
 	public static boolean isMoving() {
@@ -65,6 +108,25 @@ public class Deplacements {
 
 	public static void stop() {
 		robot.stop();
+	}
+	
+	public static void gauche() {
+		robot.rotate(90);
+		robot.travel(60);
+	}
+
+	public static void droite() {
+		robot.rotate(90);
+		robot.travel(60);
+	}
+	
+	public static void haut() {
+		robot.travel(60);
+	}
+	
+	public static void bas() {
+		robot.rotate(180);
+		robot.travel(60);
 	}
 	
 	public static void rotationGauche(double angle) {

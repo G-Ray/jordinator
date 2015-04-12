@@ -5,8 +5,11 @@ public class  Coordonnee {
 	//Coordonnees initiales
 	public static int x = 0;
 	public static int y = 1;
+	public static int last_x = 0;
+	public static int last_y = 1;
 
-	public static void update_coor(String sample){		
+	public static void update_coor(String sample) {
+		
 		switch(sample) {
 
 		case "red": y=1; break;

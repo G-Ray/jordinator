@@ -1,8 +1,24 @@
 package org.eidd.jordinator;
+
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
+import lejos.robotics.geometry.Rectangle;
+import lejos.robotics.localization.OdometryPoseProvider;
+import lejos.robotics.localization.PoseProvider;
+import lejos.robotics.mapping.LineMap;
+import lejos.robotics.navigation.DestinationUnreachableException;
+import lejos.robotics.navigation.Move;
+import lejos.robotics.navigation.MoveListener;
+import lejos.robotics.navigation.MoveProvider;
+import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Pose;
+import lejos.robotics.navigation.Waypoint;
+import lejos.robotics.pathfinding.AstarSearchAlgorithm;
+import lejos.robotics.pathfinding.FourWayGridMesh;
+import lejos.robotics.pathfinding.NodePathFinder;
+import lejos.robotics.pathfinding.Path;
 
 public class Jordinator
 {
@@ -42,8 +58,8 @@ public class Jordinator
       		  { 0, 0, 0, 0, 0}
       		};
 
-        int target_x;
-        int target_y;
+        float target_x = 0;
+        float target_y = 1;
         int x = 0;
         int y = 1; //red
         //TODO demander dans quel camp on commence
@@ -56,6 +72,8 @@ public class Jordinator
         		for(int j=1; j<4; j++)
         			if(visites[i][j] == 0) {
         				parcouru = false;
+        				target_x = i;
+        				target_y = j;
         				break;
         			}
         	
@@ -65,10 +83,11 @@ public class Jordinator
         		break;
         	}
 
-        	target_x = 1;
-        	target_y = 1;
-
-        	Deplacements.avancer(60);
+        	//target_x = 60;
+        	//target_y = 50;
+        	Deplacements.goTo(60, 50);
+        	
+        	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
         		if(Distance.obstacle) { //collision
         			eviterObstacle();
@@ -82,7 +101,8 @@ public class Jordinator
         			plateau[x][y] = 0;
         			break;
         		}
-        	}
+        	}*/
+        	
 
         	x = Coordonnee.x;
         	y = Coordonnee.y;
@@ -127,6 +147,6 @@ public class Jordinator
 		if(x==3 && Deplacements.orientation == 90)
 			Deplacements.rotationDroite(90);
 
-		Deplacements.avancerLigne();
+		Deplacements.haut();;
     }
 }

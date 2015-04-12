@@ -86,7 +86,7 @@ public class Jordinator
         	//target_x = 60;
         	//target_y = 50;
         	Deplacements.goTo(60, 50);
-        	
+
         	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
         		if(Distance.obstacle) { //collision

@@ -3,6 +3,7 @@ package org.eidd.jordinator;
 import java.io.IOException;
 
 import lejos.robotics.RegulatedMotor;
+import lejos.robotics.geometry.Line;
 import lejos.robotics.geometry.Rectangle;
 import lejos.robotics.localization.OdometryPoseProvider;
 import lejos.robotics.localization.PoseProvider;
@@ -37,6 +38,7 @@ public class Deplacements {
 	private static Navigator nav;
 	private static NodePathFinder npf;
 	private static PoseProvider position;
+	private static ShortestPathFinder spf;
 
 	public static void init() {
     	PilotProps pp = new PilotProps();
@@ -63,15 +65,19 @@ public class Deplacements {
     	robot.setAcceleration(2000);
 		robot.setTravelSpeed(30); // cm/sec
 		robot.setRotateSpeed(30); // deg/sec
-		
-		
-    	//Line [] lines = new Line[] {};
-    	Rectangle rec = new Rectangle(0, 0, 300, 250);
-    	LineMap map = new LineMap(null, rec);
-    	FourWayGridMesh mesh = new FourWayGridMesh(map, 10, 5);
-    	AstarSearchAlgorithm astar = new AstarSearchAlgorithm();
-    	npf = new NodePathFinder(astar, mesh);
-    	//ShortestPathFinder spf = new ShortestPathFinder(null);
+
+    	Line [] lines = new Line[4];
+    	lines[0] = new Line(0, 0, 180, 0);
+    	lines[0] = new Line(180, 0, 180, 150);
+    	lines[0] = new Line(180, 150, 0, 150);
+    	lines[0] = new Line(180, 150, 0, 0);
+    	
+    	Rectangle rec = new Rectangle(0, 0, 180, 150);
+    	LineMap map = new LineMap(lines, rec);
+    	//FourWayGridMesh mesh = new FourWayGridMesh(map, 10, 5);
+    	//AstarSearchAlgorithm astar = new AstarSearchAlgorithm();
+    	//npf = new NodePathFinder(astar, mesh);
+    	spf = new ShortestPathFinder(map);
 
     	Pose start = new Pose(1, 1, 1);
     	Waypoint end = new Waypoint(60, 50);
@@ -86,7 +92,7 @@ public class Deplacements {
 	public static void goTo(double x, double y) {
         System.out.println("Planning path...");
         try {
-			nav.followPath(npf.findRoute(position.getPose(), new Waypoint(x, y)));
+			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
 		} catch (DestinationUnreachableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

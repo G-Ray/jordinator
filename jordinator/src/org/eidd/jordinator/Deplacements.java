@@ -1,5 +1,6 @@
 package org.eidd.jordinator;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import lejos.hardware.motor.UnregulatedMotor;
@@ -21,7 +22,7 @@ public class Deplacements {
 	static boolean reverse;
 	private static DifferentialPilot robot;
 	private static String [] lignesPleines = {"white", "green", "blue", "black"};
-	private static int orientation; // 0 face au but
+	public static int orientation; // 0 face au but
 
 	public static void init() {
     	PilotProps pp = new PilotProps();
@@ -50,24 +51,30 @@ public class Deplacements {
 		robot.setRotateSpeed(30); // deg/sec
 	}
 	
+	public static boolean isMoving() {
+		return robot.isMoving();
+	}
+	
 	public static void avancer(double distance) {
-		robot.travel(distance);
+		robot.travel(distance, true);
 	}
 
 	public static void reculer(double distance) {
-		robot.travel(-distance);
+		robot.travel(-distance, true);
 	}
-	
+
 	public static void stop() {
 		robot.stop();
 	}
 	
 	public static void rotationGauche(double angle) {
 		robot.rotate(angle);
+		orientation -= angle;
 	}
 
 	public static void rotationDroite(double angle) {
 		robot.rotate(-angle);
+		orientation += angle;
 	}
 
 	public static void arcAvantGauche(double turnRate) {
@@ -167,13 +174,19 @@ public class Deplacements {
 		robot.forward();
 		while(robot.isMoving()) {
 			if(Couleurs.getColor() == "white") {
-				avancer(10);
-				arcArriereDroite(120);
+				avancer(5);
 				Pinces.ouvrir(); //BUT !!!
+				reculer(5);
 				robot.rotate(180);
 			}
 		}
 		orientation = 180;
+		robot.stop();
+	}
+	
+	public static void avancerLigne() {
+		robot.forward();
+		while(Couleurs.getColor() != "grey");
 		robot.stop();
 	}
 }

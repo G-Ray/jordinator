@@ -8,4 +8,5 @@ public class Config {
 	public static String PORT_BUTTON = "S1";
 	public static String WHEELDIAMETER = "5.5";
 	public static String TRACKWIDTH = "13.3";
+	public static int DISTANCE_COLLISION = 15;
 }

@@ -39,9 +39,10 @@ public class Distance {
 				sp.fetchSample(sample, 0);
 				distance = sample[0];
 
-				if(distance < 15)
+				if(distance < Config.DISTANCE_COLLISION)
 					obstacle = true;
-			} 
+				else obstacle = false;
+			}
 		}
 	}
 }

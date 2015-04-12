@@ -1,25 +1,24 @@
 package org.eidd.jordinator;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.port.Port;
-import lejos.robotics.pathfinding.NavigationMesh;
-import lejos.utility.Delay;
 
 public class Jordinator
 {
+	private static int x;
+	private static int y;
+
     public static void main(String[] args)
     {
         GraphicsLCD g = BrickFinder.getDefault().getGraphicsLCD();
         final int SW = g.getWidth();
         final int SH = g.getHeight();
-        Button.LEDPattern(5); //Rouge clignotant
         g.setFont(Font.getLargeFont());
         g.drawString("Jordinator", SW/2, SH/2, GraphicsLCD.BASELINE|GraphicsLCD.HCENTER);
         g.clear();
         g.refresh();
+        Button.LEDPattern(5); //Jordinateur se reveille : Rouge clignotant
 
         // Init sensors - start threads
         Deplacements.init();
@@ -43,35 +42,50 @@ public class Jordinator
       		  { 0, 0, 0, 0, 0}
       		};
 
+        int target_x;
+        int target_y;
         int x = 0;
-        int y = 1;
+        int y = 1; //red
+        //TODO demander dans quel camp on commence
+        if(Couleurs.getColor() == "black") y = 2;
+        if(Couleurs.getColor() == "yellow") y = 3;
 
-        /*
-         * prochaines coordonnees à visiter
-         * Obstacle detecté => calculer un autre chemin
-         * palais détecté => prendre le chemin le plus court
-         */
-
-        while(true) { //game loop
+        while(true) { //Main game loop
         	boolean parcouru = true;
-        	for(int i=0; i<5; i++)
-        		for(int j=0; j<5; j++)
+        	for(int i=1; i<4; i++)
+        		for(int j=1; j<4; j++)
         			if(visites[i][j] == 0) {
         				parcouru = false;
-        				x=i; y=j;
         				break;
         			}
-
-        	//On a visité tous les noeuds
+        	
+        	//On a visité toutes les positions des palais
         	if (parcouru == true) {
-        		System.out.println("PARCOURT TERMINE");
+        		System.out.println("Parcourt termine");
         		break;
         	}
 
-        	Deplacements.suivreLigne("red", "blue");
-        	Deplacements.suivreLigne("blue", "yellow");
-        	Deplacements.suivreLigne("yellow", "green");
-        	Deplacements.suivreLigne("yellow", "black");
+        	target_x = 1;
+        	target_y = 1;
+
+        	Deplacements.avancer(60);
+        	while(Deplacements.isMoving()) {
+        		if(Distance.obstacle) { //collision
+        			eviterObstacle();
+        		}
+        		if(Pinces.capture) {
+        			Deplacements.marquer();
+        			while(Deplacements.isMoving()) {
+        				if(Distance.obstacle)
+        					eviterObstacle();
+        			}
+        			plateau[x][y] = 0;
+        			break;
+        		}
+        	}
+
+        	x = Coordonnee.x;
+        	y = Coordonnee.y;
 
         	System.out.println(x + ":" + y);
         	visites[x][y] = 1;
@@ -79,20 +93,40 @@ public class Jordinator
 
         g.clear();
         g.refresh();
-        System.exit(0);
     }
 
-    public void marquer() {
-    	//calculer le chemin vers le but le plus court
-    	//y aller
-    }
-
-    //se debrouille pour aller à des coordonnées spécifiques
-    public void allerVers(int x, int y) {
+    private static void eviterObstacle() {
+		if(y == 1 && Deplacements.orientation == 0)
+			Deplacements.rotationGauche(90);
+		else if(y == 1 && Deplacements.orientation == 180)
+			Deplacements.rotationDroite(90);
     	
-    }
+		if(y == 2 && Deplacements.orientation == 0)
+			Deplacements.rotationDroite(90);
+		else if(y == 2 && Deplacements.orientation == 180)
+			Deplacements.rotationGauche(90);
+		
+		if(y == 3 && Deplacements.orientation == 0)
+			Deplacements.rotationDroite(90);
+		else if(y == 3 && Deplacements.orientation == 180)
+			Deplacements.rotationGauche(90);
+		
+		if(x==1 && Deplacements.orientation == -90)
+			Deplacements.rotationDroite(90);
+		if(x==1 && Deplacements.orientation == 90)
+			Deplacements.rotationGauche(90);
+		
+		if(x==2 && Deplacements.orientation == -90)
+			Deplacements.rotationDroite(90);
+		if(x==2 && Deplacements.orientation == 90)
+			Deplacements.rotationGauche(90);
+		
+		
+		if(x==3 && Deplacements.orientation == -90)
+			Deplacements.rotationGauche(90);
+		if(x==3 && Deplacements.orientation == 90)
+			Deplacements.rotationDroite(90);
 
-    public void bfs() {
-    	
+		Deplacements.avancerLigne();
     }
 }

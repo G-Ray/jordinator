@@ -64,7 +64,7 @@ public class Deplacements {
     	
     	robot = new DifferentialPilot(wheelDiameter,trackWidth,leftMotor,rightMotor,reverse);
 
-    	robot.setAcceleration(2000);
+    	robot.setAcceleration(1000);
 		robot.setTravelSpeed(30); // cm/sec
 		robot.setRotateSpeed(30); // deg/sec
 
@@ -111,6 +111,16 @@ public class Deplacements {
         	}
         }
         nav.waitForStop();
+	}
+	
+	public static void setX(float x) {
+		Pose p = position.getPose();
+		p.setLocation(x, p.getY());
+	}
+
+	public static void setY(float y) {
+		Pose p = position.getPose();
+		p.setLocation(p.getX(), y);
 	}
 	
 	public static float getX() {

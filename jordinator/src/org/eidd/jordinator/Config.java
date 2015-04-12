@@ -9,4 +9,6 @@ public class Config {
 	public static String WHEELDIAMETER = "5.5";
 	public static String TRACKWIDTH = "13.3";
 	public static int DISTANCE_COLLISION = 15;
+	public static int DISTANCE_X = 60;
+	public static int DISTANCE_Y = 50;
 }

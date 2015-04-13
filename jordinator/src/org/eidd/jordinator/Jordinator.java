@@ -19,6 +19,7 @@ import lejos.robotics.pathfinding.AstarSearchAlgorithm;
 import lejos.robotics.pathfinding.FourWayGridMesh;
 import lejos.robotics.pathfinding.NodePathFinder;
 import lejos.robotics.pathfinding.Path;
+import lejos.utility.Delay;
 
 public class Jordinator
 {
@@ -38,8 +39,8 @@ public class Jordinator
 
         // Init sensors - start threads
         Deplacements.init();
-        Distance.init();
-        Couleurs.init();
+        //Distance.init();
+        //Couleurs.init();
         Pinces.init();
 
         float[][] visites = new float[][] {
@@ -58,7 +59,7 @@ public class Jordinator
         if(Couleurs.getColor() == "yellow") y = 3;
 
         while(true) { //Main game loop
-        	boolean parcouru = true;
+        	/*boolean parcouru = true;
         	for(int i=1; i<4; i++)
         		for(int j=1; j<4; j++)
         			if(visites[i][j] == 0) {
@@ -72,10 +73,23 @@ public class Jordinator
         	if (parcouru == true) {
         		System.out.println("Parcourt termine");
         		break;
-        	}
+        	}*/
 
-        	System.out.println("target " + target_x + ":" + target_y);
-        	Deplacements.goTo(target_x, target_y);
+        	//Pinces.pincer();
+        	//Pinces.pincer();
+        	Delay.msDelay(6000);
+        	target_x = 30;
+        	target_y = 30;
+        	//System.out.println("target " + target_x + ":" + target_y);
+        	//Deplacements.goTo(target_x, target_y);
+        	Deplacements.goTo(180, 0);
+        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
+        	Deplacements.goTo(180, 100);
+        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
+        	Deplacements.goTo(0, 100);
+        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
+        	Deplacements.goTo(0, 0);
+        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
 
         	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
@@ -93,14 +107,14 @@ public class Jordinator
         		}
         	}*/
         	
-        	x = (int) Deplacements.getX();
-        	y = (int) Deplacements.getY();
+        	//x = (int) Deplacements.getX();
+        	//y = (int) Deplacements.getY();
 
-        	visites[x][y] = 1;
+        	//visites[x][y] = 1;
         }
 
-        g.clear();
-        g.refresh();
+        //g.clear();
+        //g.refresh();
     }
 
     private static void eviterObstacle() {

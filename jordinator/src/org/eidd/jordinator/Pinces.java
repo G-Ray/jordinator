@@ -47,7 +47,7 @@ public class Pinces {
 					
 				}
 
-				if(bouton.isPressed() && Distance.distance > 10) {
+				if(bouton.isPressed() && Distance.distance > 10 && capture == false) {
 					Pinces.pincer();
 				}
 			}

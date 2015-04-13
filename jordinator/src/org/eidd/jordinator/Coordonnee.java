@@ -26,7 +26,7 @@ public class  Coordonnee {
 		float x = Deplacements.getX();
 		float y = Deplacements.getY();
 
-		switch(sample) {
+		/*switch(sample) {
 			case "red": Deplacements.setY(Config.DISTANCE_Y); break;
 			case "yellow": Deplacements.setY(3 * Config.DISTANCE_Y); break;
 			case "green": Deplacements.setX(Config.DISTANCE_X); break;
@@ -41,6 +41,6 @@ public class  Coordonnee {
 				else if( y<Config.DISTANCE_Y || y>3*Config.DISTANCE_Y )
 					Deplacements.setX(2 * Config.DISTANCE_X);
 				break;
-		}
+		}*/
 	}
 }

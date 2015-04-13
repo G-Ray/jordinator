@@ -6,6 +6,7 @@ import org.jfree.chart.plot.dial.DialPointer.Pin;
 
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.geometry.Line;
+import lejos.robotics.geometry.Point;
 import lejos.robotics.geometry.Rectangle;
 import lejos.robotics.localization.OdometryPoseProvider;
 import lejos.robotics.localization.PoseProvider;
@@ -20,6 +21,7 @@ import lejos.robotics.pathfinding.FourWayGridMesh;
 import lejos.robotics.pathfinding.NodePathFinder;
 import lejos.robotics.pathfinding.Path;
 import lejos.robotics.pathfinding.ShortestPathFinder;
+import lejos.utility.Delay;
 import lejos.utility.PilotProps;
 
 /**
@@ -38,9 +40,9 @@ public class Deplacements {
 	private static String [] lignesPleines = {"white", "green", "blue", "black"};
 	public static int orientation; // 0 face au but
 	private static Navigator nav;
-	private static NodePathFinder npf;
 	private static PoseProvider position;
 	private static ShortestPathFinder spf;
+	private static LineMap map;
 
 	public static void init() {
     	PilotProps pp = new PilotProps();
@@ -64,52 +66,47 @@ public class Deplacements {
     	
     	robot = new DifferentialPilot(wheelDiameter,trackWidth,leftMotor,rightMotor,reverse);
 
-    	robot.setAcceleration(1000);
-		robot.setTravelSpeed(30); // cm/sec
-		robot.setRotateSpeed(30); // deg/sec
+    	robot.setAcceleration(Config.ACCELERATION);
+		robot.setTravelSpeed(Config.TRAVEL_SPEED); // cm/sec
+		robot.setRotateSpeed(Config.ROTATE_SPEED); // deg/sec
 
     	Line [] lines = new Line[4];
-    	lines[0] = new Line(0, 0, 180, 0);
-    	lines[0] = new Line(180, 0, 180, 150);
-    	lines[0] = new Line(180, 150, 0, 150);
-    	lines[0] = new Line(180, 150, 0, 0);
-    	
-    	Rectangle rec = new Rectangle(0, 0, 180, 150);
-    	LineMap map = new LineMap(lines, rec);
-    	//FourWayGridMesh mesh = new FourWayGridMesh(map, 10, 5);
-    	//AstarSearchAlgorithm astar = new AstarSearchAlgorithm();
-    	//npf = new NodePathFinder(astar, mesh);
-    	spf = new ShortestPathFinder(map);
+    	//lines[0] = new Line(0, 0, 150, 0);
+    	//lines[0] = new Line(150, 0, 150, 180);
+    	//lines[0] = new Line(150, 180, 0, 180);
+    	//lines[0] = new Line(150, 180, 0, 0);
 
-    	Pose start = new Pose(1, 1, 1);
-    	Waypoint end = new Waypoint(60, 50);
-    	Path path = null;
+    	lines [0] = new Line(0, 0, 240, 0);   //left >> right bottom
+    	lines [1] = new Line(240, 0, 240, 200);      // down >> up
+    	lines [2] = new Line(240, 200, 0, 200);
+    	lines [3] = new Line(0, 200, 0, 0);   //full rectangle 
+    	Rectangle bounds = new Rectangle(0, 0, 240, 200);
 
+    	map = new LineMap(lines, bounds);
 	    position = new OdometryPoseProvider(robot);
 
+    	spf = new ShortestPathFinder(map);
         nav = new Navigator(robot, position);
-        
+        leftMotor.setSpeed(12);
+        rightMotor.setSpeed(20);
 	}
 	
-	public static void goTo(double x, double y) {
+	public static void goTo(float x, float y) {
         System.out.println("Planning path...");
-        try {
-			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
-		} catch (DestinationUnreachableException e) {
+        //try {
+			//nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
+			nav.goTo(x, y);
+			while(nav.isMoving()) {
+				if(Pinces.capture) {
+					nav.stop();
+					marquer();
+					return;
+				}
+			}
+		/*} catch (DestinationUnreachableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        while(nav.isMoving()) {
-        	if(Pinces.capture)
-        	{
-        		nav.stop();
-        		marquer();
-        	}
-        	if(Distance.obstacle) {
-        		nav.stop();
-        		//nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
-        	}
-        }
+		}*/
         nav.waitForStop();
 	}
 	
@@ -284,7 +281,7 @@ public class Deplacements {
 	}*/
 	public static void marquer() {
         System.out.println("Planning path...");
-        double but_x = 180;
+        double but_x = 220;
         double but_y = 75;
         try {
 			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(but_x, but_y)));
@@ -294,8 +291,12 @@ public class Deplacements {
 		}
         nav.waitForStop();
         Pinces.ouvrir();
+        //nav.goTo(position.getPose().getX()-10, position.getPose().getY());
+
         robot.travel(-10);
-        robot.rotate(180);
+        Pinces.pincer();
+        robot.travel(10);
+        Pinces.ouvrir();
 	}
 	
 	public static void avancerLigne() {

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.jfree.chart.plot.dial.DialPointer.Pin;
 
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.geometry.Line;
 import lejos.robotics.geometry.Point;
@@ -63,18 +65,16 @@ public class Deplacements {
     	leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
     	rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
     	reverse = Boolean.parseBoolean(pp.getProperty(PilotProps.KEY_REVERSE,"false"));
-    	
-    	robot = new DifferentialPilot(wheelDiameter,trackWidth,leftMotor,rightMotor,reverse);
 
+        leftMotor.setSpeed(10);
+        rightMotor.setSpeed(20);
+    	robot = new DifferentialPilot(Config.LEFT_WHEEL_DIAMETER, Config.LEFT_WHEEL_DIAMETER, trackWidth, leftMotor, rightMotor, reverse);
+   
     	robot.setAcceleration(Config.ACCELERATION);
-		robot.setTravelSpeed(Config.TRAVEL_SPEED); // cm/sec
-		robot.setRotateSpeed(Config.ROTATE_SPEED); // deg/sec
+		robot.setTravelSpeed(Config.TRAVEL_SPEED);// cm/sec
+		robot.setRotateSpeed(Config.ROTATE_SPEED);// deg/sec
 
     	Line [] lines = new Line[4];
-    	//lines[0] = new Line(0, 0, 150, 0);
-    	//lines[0] = new Line(150, 0, 150, 180);
-    	//lines[0] = new Line(150, 180, 0, 180);
-    	//lines[0] = new Line(150, 180, 0, 0);
 
     	lines [0] = new Line(0, 0, 240, 0);   //left >> right bottom
     	lines [1] = new Line(240, 0, 240, 200);      // down >> up
@@ -87,26 +87,18 @@ public class Deplacements {
 
     	spf = new ShortestPathFinder(map);
         nav = new Navigator(robot, position);
-        leftMotor.setSpeed(12);
-        rightMotor.setSpeed(20);
 	}
 	
 	public static void goTo(float x, float y) {
-        System.out.println("Planning path...");
-        //try {
-			//nav.followPath(spf.findRoute(position.getPose(), new Waypoint(x, y)));
-			nav.goTo(x, y);
-			while(nav.isMoving()) {
-				if(Pinces.capture) {
-					nav.stop();
-					marquer();
-					return;
-				}
+        System.out.println("goTo " + x +":" + "y");
+		nav.goTo(x, y);
+		while(nav.isMoving()) {
+			if(Pinces.capture) {
+				nav.stop();
+				marquer();
+				return;
 			}
-		/*} catch (DestinationUnreachableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		}
         nav.waitForStop();
 	}
 	
@@ -230,12 +222,16 @@ public class Deplacements {
 			if(Couleurs.getColor() == color) {
 				robot.forward();
 				while(robot.isMoving()) {
+					;
+					}
+				/*while(robot.isMoving()) {
 					if(Pinces.capture) {
 						Deplacements.marquer();
 						return;
 					}
-				}
+				}*/
 			}
+			robot.stop();
 	
 			while(Couleurs.getColor() != color) {
 				boolean found = false;
@@ -243,19 +239,20 @@ public class Deplacements {
 				int angle = 2;
 				if(!found) {
 					robot.travel(2, true); // Essayons 2 cm plus loin
-					while(robot.isMoving()) {
+					/*while(robot.isMoving()) {
 						if(Couleurs.getColor() == color) {
 							found = true;
 							break;
 						}
-					}
+					}*/
 				}
 				while(!found) {
 					robot.rotate(angle, true);
 					while(robot.isMoving()) {
 						if(Couleurs.getColor() == color) {
 							found = true;
-							robot.stop();
+							//robot.forward();
+							//robot.stop();
 							break;
 						}
 					}

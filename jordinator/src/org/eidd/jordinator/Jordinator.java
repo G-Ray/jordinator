@@ -40,7 +40,7 @@ public class Jordinator
         // Init sensors - start threads
         Deplacements.init();
         //Distance.init();
-        //Couleurs.init();
+        Couleurs.init();
         Pinces.init();
 
         float[][] visites = new float[][] {
@@ -82,7 +82,7 @@ public class Jordinator
         	target_y = 30;
         	//System.out.println("target " + target_x + ":" + target_y);
         	//Deplacements.goTo(target_x, target_y);
-        	Deplacements.goTo(180, 0);
+        	/*Deplacements.goTo(180, 0);
         	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
         	Deplacements.goTo(180, 100);
         	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
@@ -90,7 +90,9 @@ public class Jordinator
         	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
         	Deplacements.goTo(0, 0);
         	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
-
+*/
+        	//Deplacements.suivreLigne("blue", "green");
+        	Deplacements.avancer(30);
         	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
         		if(Distance.obstacle) { //collision

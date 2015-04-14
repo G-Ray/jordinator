@@ -11,7 +11,9 @@ public class Config {
 	public static int DISTANCE_COLLISION = 15;
 	public static int DISTANCE_X = 60;
 	public static int DISTANCE_Y = 50;
-	public static int ACCELERATION = 30;
+	public static int ACCELERATION = 20;
 	public static int TRAVEL_SPEED = 20;
 	public static int ROTATE_SPEED = 20;
+	public static double LEFT_WHEEL_DIAMETER = 5.6;
+	public static double RIGHT_WHEEL_DIAMETER = 5.5;
 }

@@ -109,7 +109,7 @@ public class Couleurs {
 			minscal = scalaire;
 			color = "green";
 		}
-		
+
 		scalaire = scalaire(sample, yellow);
 		if (scalaire < minscal) {
 			minscal = scalaire;

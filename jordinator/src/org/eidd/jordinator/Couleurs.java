@@ -41,7 +41,7 @@ public class Couleurs {
 		float[] sample = new float[sp.sampleSize()];
 		sp.fetchSample(sample, 0);
 		
-		return scalaire(sample);
+	    return scalaire(sample);
 	}
 	
 	public static double getScalaire(String color) {

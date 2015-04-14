@@ -77,7 +77,7 @@ public class Jordinator
 
         	//Pinces.pincer();
         	//Pinces.pincer();
-        	Delay.msDelay(6000);
+        	//Delay.msDelay(6000);
         	target_x = 30;
         	target_y = 30;
         	//System.out.println("target " + target_x + ":" + target_y);
@@ -94,21 +94,6 @@ public class Jordinator
         	//Deplacements.suivreLigne("blue", "green");
         	//Deplacements.avancer(30);
         	Deplacements.suivreLigne("red");
-        	/*Deplacements.haut();
-        	while(Deplacements.isMoving()) {
-        		if(Distance.obstacle) { //collision
-        			eviterObstacle();
-        		}
-        		if(Pinces.capture) {
-        			Deplacements.marquer();
-        			while(Deplacements.isMoving()) {
-        				if(Distance.obstacle)
-        					eviterObstacle();
-        			}
-        			plateau[x][y] = 0;
-        			break;
-        		}
-        	}*/
         	
         	//x = (int) Deplacements.getX();
         	//y = (int) Deplacements.getY();

@@ -185,51 +185,67 @@ public class Deplacements {
 	}
 
 	public static void suivreLigne(String c) {
-		RegulatedMotor tmpL = leftMotor;
-		RegulatedMotor tmpR = rightMotor;
-		
+		int power = 50;
+		long startTime;
+		long time;
+		int boost = 3;
+		int msLimit = 500;
+
 		leftMotor.close();
 		rightMotor.close();
-		int power = 50;
-		
+
 		Port pLeft = LocalEV3.get().getPort(Config.PORT_LEFTMOTOR);
 		Port pRight = LocalEV3.get().getPort(Config.PORT_RIGHTMOTOR);
 		UnregulatedMotor left = new UnregulatedMotor(pLeft);
 		UnregulatedMotor right = new UnregulatedMotor(pRight);
 		
 		left.setPower(power);
-		
-		long startTime;
-		long time;
 
-		while(true) {
-			left.forward();
-			right.forward();
+		left.forward();
+		right.forward();
 
-			if(Couleurs.getColor() == "gray") {
-				right.setPower(power + 20);
+		while(Couleurs.getColor() == "grey" || Couleurs.getColor() == c) {
+			left.setPower(power);
+			right.setPower(power);
+			boost = 3;
+
+			while(Couleurs.getColor() == "grey") {
+				left.setPower(power);
+				right.setPower(power + boost);
 				startTime = System.currentTimeMillis();
 				while(right.isMoving()) {
 					time = System.currentTimeMillis() - startTime;
-					if(Couleurs.getColor() == c || time > 1000) {
+					if(Couleurs.getColor() == c || time > msLimit) {
 						right.setPower(power);
 						break;
 					}
 				}
-			}
-			if(Couleurs.getColor() == "gray") {
-				left.setPower(power + 20);
-				startTime = System.currentTimeMillis();
-				while(right.isMoving()) {
-					time = System.currentTimeMillis() - startTime;
-					if(Couleurs.getColor() == c || time > 2000) {
-						left.setPower(power);
-						break;
+			
+				//on essaye dans l'autre sens si ca n'a pas marché
+				if(Couleurs.getColor() == "grey") {
+					right.setPower(power);
+					left.setPower(power + boost);
+					startTime = System.currentTimeMillis();
+					while(right.isMoving()) {
+						time = System.currentTimeMillis() - startTime;
+						if(Couleurs.getColor() == c || time > msLimit*2) {
+							left.setPower(power);
+							break;
+						}
 					}
 				}
+
+				boost += 3;
 			}
 		}
 
+		left.stop();
+		right.stop();
+		left.close();
+		right.close();
+
+		leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
+    	rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
 	}
 
 	public static void marquer() {
@@ -258,4 +274,3 @@ public class Deplacements {
 		robot.stop();
 	}
 }
-;

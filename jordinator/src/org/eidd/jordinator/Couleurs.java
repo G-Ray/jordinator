@@ -35,6 +35,27 @@ public class Couleurs {
 	public static String getColor() {
 		return color;
 	}
+	
+	public static double getScalaire() {
+		SampleProvider sp = new MeanFilter(colorSensor.getRGBMode(), 1);
+		float[] sample = new float[sp.sampleSize()];
+		sp.fetchSample(sample, 0);
+		
+		return scalaire(sample);
+	}
+	
+	public static double getScalaire(String color) {
+		switch(color) {
+		case "blue": return scalaire(blue);
+		case "red": return scalaire(red);
+		case "green": return scalaire(green);
+		case "yellow": return scalaire(yellow);
+		case "black": return scalaire(black);
+		case "white": return scalaire(white);
+		case "grey": return scalaire(grey);
+		}
+		return 0;
+	}
 
 	public static void calibrate() {
 		try {
@@ -140,6 +161,10 @@ public class Couleurs {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +
 				Math.pow(v1[2] - v2[2], 2.0));
+	}
+
+	private static double scalaire(float[] v1) {
+		return (v1[0] + v1[1] + v1[2]);
 	}
 
 	private static class ColorThread extends Thread {

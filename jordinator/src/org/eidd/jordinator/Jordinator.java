@@ -92,7 +92,8 @@ public class Jordinator
         	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
 */
         	//Deplacements.suivreLigne("blue", "green");
-        	Deplacements.avancer(30);
+        	//Deplacements.avancer(30);
+        	Deplacements.suivreLigne("red");
         	/*Deplacements.haut();
         	while(Deplacements.isMoving()) {
         		if(Distance.obstacle) { //collision

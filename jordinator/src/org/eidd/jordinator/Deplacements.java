@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.jfree.chart.plot.dial.DialPointer.Pin;
 
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.RegulatedMotor;
@@ -45,9 +47,10 @@ public class Deplacements {
 	private static PoseProvider position;
 	private static ShortestPathFinder spf;
 	private static LineMap map;
+	private static PilotProps pp;
 
 	public static void init() {
-    	PilotProps pp = new PilotProps();
+    	pp = new PilotProps();
     	try {
 			pp.loadPersistentValues();
 		} catch (IOException e) {
@@ -66,8 +69,6 @@ public class Deplacements {
     	rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
     	reverse = Boolean.parseBoolean(pp.getProperty(PilotProps.KEY_REVERSE,"false"));
 
-        leftMotor.setSpeed(10);
-        rightMotor.setSpeed(20);
     	robot = new DifferentialPilot(Config.LEFT_WHEEL_DIAMETER, Config.LEFT_WHEEL_DIAMETER, trackWidth, leftMotor, rightMotor, reverse);
    
     	robot.setAcceleration(Config.ACCELERATION);
@@ -181,85 +182,37 @@ public class Deplacements {
 		robot.steerBackward(-turnRate);
 	}
 
-	public static void suivreLigne(String color, String arret) {
+	public static void suivreLigne(String c) {
+		//leftMotor.stop();
+		//rightMotor.stop();
+		leftMotor.close();
+		rightMotor.close();
+		UnregulatedMotor left = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_LEFTMOTOR));
+		UnregulatedMotor right = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_RIGHTMOTOR));
 
-		boolean lignePleine = false;
-		for(String s : lignesPleines)
-			if(s == color)
-				lignePleine = true;
+		double grey = Couleurs.getScalaire("grey");
+		double color = Couleurs.getScalaire(c);
+		double midpoint = (grey - color) / 2 + color;
+		double value;
 
-		//on verifie si on doit tourner pour commencer a suivre la ligne
-		/*robot.travel(2);
-		if(Couleurs.getColor() != color) {
-			int angle = 100;
-			robot.steer(150, 100, true);
-			while(robot.isMoving()) {
-				if(Couleurs.getColor() == color) {
-					if(angle < 0)
-						orientation -= 90;
-					else orientation += 90;
-					break;
-				}
+		left.forward();
+		right.forward();
+		while(Couleurs.getColor() == "grey" || Couleurs.getColor() == c) {
+			value = Couleurs.getScalaire();
+			if(value < midpoint) { //trop a gauche
+				left.setPower(50);
+				right.setPower(45);
+			}
+			else { //trop a droite
+				left.setPower(45);
+				right.setPower(50);
 			}
 		}
+		left.stop();
+		right.stop();
 
-		if(lignePleine) {
-			robot.forward();
-			while(robot.isMoving()) {
-				if(Couleurs.getColor() == color) {
-					robot.rotate(3);
-					robot.travel(130, true);
-				}
-				if(Couleurs.getColor() == arret) {
-					robot.stop();
-					return;
-				}
-			}
-		}*/
-		
-		while(Couleurs.getColor() != arret) {
-
-			if(Couleurs.getColor() == color) {
-				robot.forward();
-				while(robot.isMoving()) {
-					;
-					}
-				/*while(robot.isMoving()) {
-					if(Pinces.capture) {
-						Deplacements.marquer();
-						return;
-					}
-				}*/
-			}
-			robot.stop();
-	
-			while(Couleurs.getColor() != color) {
-				boolean found = false;
-				int turnRate = -50;
-				int angle = 2;
-				if(!found) {
-					robot.travel(2, true); // Essayons 2 cm plus loin
-					/*while(robot.isMoving()) {
-						if(Couleurs.getColor() == color) {
-							found = true;
-							break;
-						}
-					}*/
-				}
-				while(!found) {
-					robot.rotate(angle, true);
-					while(robot.isMoving()) {
-						if(Couleurs.getColor() == color) {
-							found = true;
-							//robot.forward();
-							//robot.stop();
-							break;
-						}
-					}
-					angle *= -2;
-				}
-			}
-		}
+		leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
+    	rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
 	}
 	
 	/*public static void marquer() {

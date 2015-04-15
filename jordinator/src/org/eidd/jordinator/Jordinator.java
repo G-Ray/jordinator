@@ -55,50 +55,12 @@ public class Jordinator
         float target_y = 1;
 
         //TODO demander dans quel camp on commence
-        if(Couleurs.getColor() == "black") y = 2;
-        if(Couleurs.getColor() == "yellow") y = 3;
-
+        
         while(true) { //Main game loop
-        	/*boolean parcouru = true;
-        	for(int i=1; i<4; i++)
-        		for(int j=1; j<4; j++)
-        			if(visites[i][j] == 0) {
-        				parcouru = false;
-        				target_x = i;
-        				target_y = j;
-        				break;
-        			}
-
-        	//On a visité toutes les positions des palais
-        	if (parcouru == true) {
-        		System.out.println("Parcourt termine");
-        		break;
-        	}*/
-
-        	//Pinces.pincer();
-        	//Pinces.pincer();
-        	//Delay.msDelay(6000);
         	target_x = 30;
         	target_y = 30;
-        	//System.out.println("target " + target_x + ":" + target_y);
-        	//Deplacements.goTo(target_x, target_y);
-        	/*Deplacements.goTo(180, 0);
-        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
-        	Deplacements.goTo(180, 100);
-        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
-        	Deplacements.goTo(0, 100);
-        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
-        	Deplacements.goTo(0, 0);
-        	System.out.println(Deplacements.getX() + ":" + Deplacements.getY());
-*/
-        	//Deplacements.suivreLigne("blue", "green");
-        	//Deplacements.avancer(30);
-        	Deplacements.suivreLigne("red");
-        	
-        	//x = (int) Deplacements.getX();
-        	//y = (int) Deplacements.getY();
 
-        	//visites[x][y] = 1;
+        	Deplacements.suivreLigne("red");
         }
 
         //g.clear();

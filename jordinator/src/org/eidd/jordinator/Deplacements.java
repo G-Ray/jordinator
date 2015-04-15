@@ -43,7 +43,6 @@ public class Deplacements {
 	private static float trackWidth;
 	static boolean reverse;
 	private static DifferentialPilot robot;
-	private static String [] lignesPleines = {"white", "green", "blue", "black"};
 	public static int orientation; // 0 face au but
 	private static Navigator nav;
 	private static PoseProvider position;
@@ -249,9 +248,10 @@ public class Deplacements {
 	}
 
 	public static void marquer() {
-        System.out.println("Planning path...");
-        double but_x = 220;
+        System.out.println("Marquer...");
+        double but_x = 240;
         double but_y = 75;
+
         try {
 			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(but_x, but_y)));
 		} catch (DestinationUnreachableException e) {
@@ -259,18 +259,11 @@ public class Deplacements {
 			e.printStackTrace();
 		}
         nav.waitForStop();
-        Pinces.ouvrir();
-        //nav.goTo(position.getPose().getX()-10, position.getPose().getY());
 
+        Pinces.ouvrir();
         robot.travel(-10);
         Pinces.pincer();
         robot.travel(10);
         Pinces.ouvrir();
-	}
-	
-	public static void avancerLigne() {
-		robot.forward();
-		while(Couleurs.getColor() != "grey");
-		robot.stop();
 	}
 }

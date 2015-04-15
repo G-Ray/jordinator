@@ -71,7 +71,7 @@ public class Deplacements {
     	reverse = Boolean.parseBoolean(pp.getProperty(PilotProps.KEY_REVERSE,"false"));
 
     	robot = new DifferentialPilot(Config.LEFT_WHEEL_DIAMETER, Config.RIGHT_WHEEL_DIAMETER, trackWidth, leftMotor, rightMotor, reverse);
-   
+
     	robot.setAcceleration(Config.ACCELERATION);
 		robot.setTravelSpeed(Config.TRAVEL_SPEED);// cm/sec
 		robot.setRotateSpeed(Config.ROTATE_SPEED);// deg/sec
@@ -93,8 +93,13 @@ public class Deplacements {
 	
 	public static void goTo(float x, float y) {
         System.out.println("goTo " + x +":" + "y");
-		nav.goTo(x, y);
+        float startHeading = nav.getPoseProvider().getPose().getHeading();
+		nav.goTo(x, y, startHeading - 5);
+
 		while(nav.isMoving()) {
+			if(Distance.palaisPotentiel) {
+				
+			}
 			if(Pinces.capture) {
 				nav.stop();
 				marquer();

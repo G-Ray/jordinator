@@ -43,24 +43,42 @@ public class Jordinator
         Couleurs.init();
         Pinces.init();
 
-        float[][] visites = new float[][] {
+        float[][] palais = new float[][] {
       		  { 0, 0, 0, 0, 0},
-      		  { 0, 0, 0, 0, 0},
-      		  { 0, 0, 0, 0, 0},
-      		  { 0, 0, 0, 0, 0},
+      		  { 0, 1, 1, 1, 0},
+      		  { 0, 1, 1, 1, 0},
+      		  { 0, 1, 1, 1, 0},
       		  { 0, 0, 0, 0, 0}
       		};
 
         float target_x = 0;
         float target_y = 1;
+        int palais_x = 0;
+        int palais_y = 0;
 
         //TODO demander dans quel camp on commence
+    	target_x = Config.DISTANCE_X;
+    	target_y = Deplacements.getY();
+    	palais_x = (int) (target_x / Config.DISTANCE_X);
+    	palais_x = (int) (target_y / Config.DISTANCE_Y);
         
-        while(true) { //Main game loop
-        	target_x = 30;
-        	target_y = 30;
+    	palais[palais_x][palais_y] = 0; //on a visité
 
-        	Deplacements.suivreLigne("red");
+        while(true) { //Main game loop
+        	
+        	//Choose the next target area
+        	
+        	for(int i=3; i>0; i--) {
+        		for(int j=3; j>0; j--)
+        			if(palais[i][j] == 1) {
+        				target_x = i;
+        				target_y = j;
+        			}
+        	}
+
+        	palais_x = (int) (target_x / Config.DISTANCE_X);
+        	palais_x = (int) (target_y / Config.DISTANCE_Y);
+        	palais[palais_x][palais_y] = 0; //on a visité
         }
 
         //g.clear();

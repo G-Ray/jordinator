@@ -30,12 +30,14 @@ public class PaletProche {
 			Deplacements.rotationGauche(20);
 			palet[i] = Distance.distance;
 		}
-				for (j=0; j<9; j++){
-					if (palet[j] < dist){
-						dist = palet[j];
-						angle = j * 20; 
-					}	
-				}
+
+		for (j=0; j<9; j++){
+			if (palet[j] < dist){
+				dist = palet[j];
+				angle = j * 20; 
+			}	
+		}
+
 		Deplacements.rotationDroite(180 - angle);
 		Deplacements.avancer(dist * 100);
 	}

@@ -13,6 +13,7 @@ import lejos.robotics.filter.PublishFilter;
 public class Distance {
 
 	public static boolean obstacle;
+	public static boolean palaisPotentiel;
 	public static double distance = 999;
 	static float frequency =  2;// 2 sample per second
 	static float[] sample;
@@ -34,13 +35,20 @@ public class Distance {
 	}
 	
 	private static class DistanceThread extends Thread {
+		double dist = 999;
 		public void run() {
 			while(true){
 				sp.fetchSample(sample, 0);
 				distance = sample[0];
 
-				if(distance < Config.DISTANCE_COLLISION)
+				if(distance < 40 && distance > Config.DISTANCE_COLLISION) {
+					palaisPotentiel = true;
+				}
+
+				if(distance <= Config.DISTANCE_COLLISION) {
 					obstacle = true;
+					palaisPotentiel = false;
+				}
 				else obstacle = false;
 			}
 		}

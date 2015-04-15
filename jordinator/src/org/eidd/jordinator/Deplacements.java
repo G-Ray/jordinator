@@ -93,8 +93,9 @@ public class Deplacements {
 	
 	public static void goTo(float x, float y) {
         System.out.println("goTo " + x +":" + "y");
-        float startHeading = nav.getPoseProvider().getPose().getHeading();
-		nav.goTo(x, y, startHeading - 5);
+        //float startHeading = nav.getPoseProvider().getPose().getHeading();
+		//nav.goTo(x, y, startHeading - 5);
+        nav.goTo(x, y);
 
 		while(nav.isMoving()) {
 			if(Distance.palaisPotentiel) {
@@ -106,7 +107,7 @@ public class Deplacements {
 				return;
 			}
 		}
-		nav.getPoseProvider().getPose().setHeading(startHeading);
+		//nav.getPoseProvider().getPose().setHeading(startHeading);
         nav.waitForStop();
 	}
 	
@@ -192,9 +193,9 @@ public class Deplacements {
 	public static void suivreLigne(String c) {
 		int power = 50;
 		long startTime;
-		long time;
-		int boost = 3;
-		int msLimit = 500;
+		long time = 0;
+		int boost = 5;
+		int msLimit = 100;
 
 		leftMotor.close();
 		rightMotor.close();
@@ -208,39 +209,51 @@ public class Deplacements {
 
 		left.forward();
 		right.forward();
+		
+		double duree = 0;
 
 		while(Couleurs.getColor() == "grey" || Couleurs.getColor() == c) {
 			left.setPower(power);
 			right.setPower(power);
-			boost = 3;
+			msLimit = 100;
+			boolean sens = false;
 
 			while(Couleurs.getColor() == "grey") {
-				left.setPower(power);
+				time = 0;
+
 				right.setPower(power + boost);
+				left.setPower(power - boost);
 				startTime = System.currentTimeMillis();
-				while(right.isMoving()) {
+
+				if(sens)
+					duree = msLimit * 2;
+
+				while(time < duree) {
 					time = System.currentTimeMillis() - startTime;
-					if(Couleurs.getColor() == c || time > msLimit) {
-						right.setPower(power);
+					if(Couleurs.getColor() == c)
 						break;
-					}
 				}
-			
+
+				time = 0;
+
 				//on essaye dans l'autre sens si ca n'a pas marché
 				if(Couleurs.getColor() == "grey") {
-					right.setPower(power);
+					right.setPower(power - boost);
 					left.setPower(power + boost);
 					startTime = System.currentTimeMillis();
-					while(right.isMoving()) {
+
+					if(!sens)
+						duree = msLimit * 2;
+
+					while(time < duree) {
 						time = System.currentTimeMillis() - startTime;
-						if(Couleurs.getColor() == c || time > msLimit*2) {
-							left.setPower(power);
+						if(Couleurs.getColor() == c)
 							break;
-						}
 					}
 				}
 
-				boost += 3;
+				msLimit += 100;
+				sens = !sens;
 			}
 		}
 

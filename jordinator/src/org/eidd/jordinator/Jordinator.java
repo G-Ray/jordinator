@@ -68,17 +68,25 @@ public class Jordinator
         	
         	//Choose the next target area
         	
-        	for(int i=3; i>0; i--) {
+        	/*for(int i=3; i>0; i--) {
         		for(int j=3; j>0; j--)
         			if(palais[i][j] == 1) {
-        				target_x = i;
-        				target_y = j;
+        				palais_x = i;
+        				palais_y = j;
         			}
         	}
 
-        	palais_x = (int) (target_x / Config.DISTANCE_X);
-        	palais_x = (int) (target_y / Config.DISTANCE_Y);
-        	palais[palais_x][palais_y] = 0; //on a visité
+        	Deplacements.goTo(target_x, target_y);
+
+        	target_x = palais_x * Config.DISTANCE_X;
+        	target_y = palais_y * Config.DISTANCE_Y;
+   
+        	palais[palais_x][palais_y] = 0; //on a visité*/
+        	//Deplacements.suivreLigne("red");*/
+        	Deplacements.goTo(180, 0);
+        	Deplacements.goTo(180, 150);
+        	Deplacements.goTo(0, 150);
+        	Deplacements.goTo(0, 0);
         }
 
         //g.clear();

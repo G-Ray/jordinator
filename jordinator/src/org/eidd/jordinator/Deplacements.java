@@ -106,6 +106,7 @@ public class Deplacements {
 				return;
 			}
 		}
+		nav.getPoseProvider().getPose().setHeading(startHeading);
         nav.waitForStop();
 	}
 	

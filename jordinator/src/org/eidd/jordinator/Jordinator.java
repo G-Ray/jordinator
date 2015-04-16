@@ -44,11 +44,9 @@ public class Jordinator
         Pinces.init();
 
         float[][] palais = new float[][] {
-      		  { 0, 0, 0, 0, 0},
-      		  { 0, 1, 1, 1, 0},
-      		  { 0, 1, 1, 1, 0},
-      		  { 0, 1, 1, 1, 0},
-      		  { 0, 0, 0, 0, 0}
+      		  { 1, 1, 1},
+      		  { 1, 1, 1},
+      		  { 1, 1, 1}
       		};
 
         float target_x = 0;
@@ -61,32 +59,29 @@ public class Jordinator
     	target_y = Deplacements.getY();
     	palais_x = (int) (target_x / Config.DISTANCE_X);
     	palais_x = (int) (target_y / Config.DISTANCE_Y);
-        
+
     	palais[palais_x][palais_y] = 0; //on a visité
+    	Pinces.ouvrir();
 
         while(true) { //Main game loop
+        	switch(Couleurs.getColor()) {
+        	case "red": 
+        		Deplacements.suivreLigne("red", "blue");
+        		break;
         	
-        	//Choose the next target area
-        	
-        	for(int i=3; i>0; i--) {
-        		for(int j=3; j>0; j--)
-        			if(palais[i][j] == 1) {
-        				palais_x = i;
-        				palais_y = j;
-        			}
+        	case "yellow":
+        		Deplacements.suivreLigne("yellow", "blue");
+        		break;
+
+        	case "white":
+        		/*Deplacements.rotationGauche(360);
+        		while(Deplacements.isMoving()) {
+        			if(Couleurs.getColor() != "white")
+        				Deplacements.stop();
+        		}
+        		break;*/
         	}
-
-        	Deplacements.goTo(target_x, target_y);
-
-        	target_x = palais_x * Config.DISTANCE_X;
-        	target_y = palais_y * Config.DISTANCE_Y;
-   
-        	palais[palais_x][palais_y] = 0; //visité
-        	//Deplacements.suivreLigne("red");*/
         }
-
-        //g.clear();
-        //g.refresh();
     }
 
     private static void eviterObstacle() {

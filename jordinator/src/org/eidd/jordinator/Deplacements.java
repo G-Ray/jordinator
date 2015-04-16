@@ -1,6 +1,7 @@
 package org.eidd.jordinator;
 
 import java.awt.Color;
+import java.awt.Robot;
 import java.io.IOException;
 
 import org.jfree.chart.plot.dial.DialPointer.Pin;
@@ -92,7 +93,7 @@ public class Deplacements {
 	}
 	
 	public static void goTo(float x, float y) {
-        System.out.println("goTo " + x +":" + "y");
+        System.out.println("goTo " + x +":" + y);
         //float startHeading = nav.getPoseProvider().getPose().getHeading();
 		//nav.goTo(x, y, startHeading - 5);
         nav.goTo(x, y);
@@ -190,99 +191,138 @@ public class Deplacements {
 		robot.steerBackward(-turnRate);
 	}
 
-	public static void suivreLigne(String c) {
-		int power = 50;
-		long startTime;
+	public static void suivreLigne(String c, long duree) {
+		int angle;
+
+		long startTime = System.currentTimeMillis();
+		long endTime;
 		long time = 0;
-		int boost = 5;
-		int msLimit = 100;
+
+		while(time < duree || Distance.obstacle) {
+			robot.forward();
+			while(Couleurs.getColor() == c);
+
+			angle = 2;
+			robot.stop();
+
+			while(Couleurs.getColor() != c) {
+				robot.rotate(angle, true);
+				while(robot.isMoving()) {
+					if(Couleurs.getColor() == c) {
+						nav.stop();
+					}
+				}
+				angle *= -2;
+			}
+
+			endTime = System.currentTimeMillis();
+			time = endTime - startTime;
+		}
+	}
+	
+	public static void suivreLigne(String c, String c2) {
+		UnregulatedMotor left;
+		UnregulatedMotor right;
 
 		leftMotor.close();
 		rightMotor.close();
+		robot = null;
 
-		Port pLeft = LocalEV3.get().getPort(Config.PORT_LEFTMOTOR);
-		Port pRight = LocalEV3.get().getPort(Config.PORT_RIGHTMOTOR);
-		UnregulatedMotor left = new UnregulatedMotor(pLeft);
-		UnregulatedMotor right = new UnregulatedMotor(pRight);
+		left = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_LEFTMOTOR));
+		right = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_RIGHTMOTOR));
 		
-		left.setPower(power);
-
 		left.forward();
 		right.forward();
-		
-		double duree = 0;
 
-		while(Couleurs.getColor() == "grey" || Couleurs.getColor() == c) {
-			left.setPower(power);
-			right.setPower(power);
-			msLimit = 100;
-			boolean sens = false;
-
-			while(Couleurs.getColor() == "grey") {
-				time = 0;
-
-				right.setPower(power + boost);
-				left.setPower(power - boost);
-				startTime = System.currentTimeMillis();
-
-				if(sens)
-					duree = msLimit * 2;
-
-				while(time < duree) {
-					time = System.currentTimeMillis() - startTime;
-					if(Couleurs.getColor() == c)
-						break;
-				}
-
-				time = 0;
-
-				//on essaye dans l'autre sens si ca n'a pas marché
-				if(Couleurs.getColor() == "grey") {
-					right.setPower(power - boost);
-					left.setPower(power + boost);
-					startTime = System.currentTimeMillis();
-
-					if(!sens)
-						duree = msLimit * 2;
-
-					while(time < duree) {
-						time = System.currentTimeMillis() - startTime;
-						if(Couleurs.getColor() == c)
-							break;
-					}
-				}
-
-				msLimit += 100;
-				sens = !sens;
+		while(Couleurs.getColor() != c2) {
+			left.setPower(70);
+			right.setPower(70);
+			if(Couleurs.getColor() != c) {
+				right.setPower(80);
 			}
+			
+	    	if(Pinces.capture) {
+	    		left.stop();
+	    		right.stop();
+	        	left.close();
+	        	right.close();
+	        	Deplacements.init();
+	    		marquer();
+	    	}
 		}
 
 		left.stop();
 		right.stop();
-		left.close();
-		right.close();
+    	left.close();
+    	right.close();
+    	//leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
+    	//rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
+    	Deplacements.init();
 
-		leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
-    	rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
+    	avancer(15);
+    	if(Pinces.capture)
+    		marquer();
 	}
+	
+	/*public static void suivreLigne(String c, String c2) {
+		int angle;
+		float duree = 20000;
+
+		long startTime = System.currentTimeMillis();
+		long endTime;
+		long time = 0;
+
+		while(time < duree || Distance.obstacle || Couleurs.getColor() != c2) {
+			robot.forward();
+			while(Couleurs.getColor() == c);
+
+			angle = 2;
+			robot.stop();
+
+			while(Couleurs.getColor() != c) {
+				robot.rotate(angle, true);
+				while(robot.isMoving()) {
+					if(Couleurs.getColor() == c) {
+						nav.stop();
+					}
+				}
+				angle *= -2;
+			}
+
+			endTime = System.currentTimeMillis();
+			time = endTime - startTime;
+		}
+		
+		robot.stop();
+	}*/
 
 	public static void marquer() {
         System.out.println("Marquer...");
-        double but_x = 240;
-        double but_y = 75;
-
-        try {
-			nav.followPath(spf.findRoute(position.getPose(), new Waypoint(but_x, but_y)));
-		} catch (DestinationUnreachableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        rotationGauche(orientation/2);
+        avancer(25);
+        rotationGauche(orientation);
+		robot.forward();
+		while(robot.isMoving()) {
+			if(Couleurs.getColor() != "white")
+				robot.stop();
 		}
-        nav.waitForStop();
 
+        robot.travel(25);
         Pinces.ouvrir();
         robot.travel(-10);
-        Pinces.pincer();
-        robot.travel(10);
-        Pinces.ouvrir();
+        rotationGauche(180);
+	}
+	
+	public static void calibrer() {
+		robot.rotate(360);
+		float x, y;
+
+		while(robot.isMoving()) {
+			if(Couleurs.getColor() == "white") {
+				suivreLigne("white", 25000);
+			}
+		}
+
+		nav.getPoseProvider().getPose().setHeading(-90);
 	}
 }

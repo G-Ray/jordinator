@@ -41,7 +41,7 @@ public class Jordinator
         Deplacements.init();
         //Distance.init();
         Couleurs.init();
-        Pinces.init();
+        //Pinces.init();
 
         float[][] palais = new float[][] {
       		  { 1, 1, 1},
@@ -66,11 +66,46 @@ public class Jordinator
         while(true) { //Main game loop
         	switch(Couleurs.getColor()) {
         	case "red": 
-        		Deplacements.suivreLigne("red", "blue");
+        		Deplacements.suivreLigne("red", "green");
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("red", "white");
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("white", 2);
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("black", "green");
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("black", "white");
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("white", 2);
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("yellow", "green")
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("yellow", "white");
+        		Deplacements.rotationDroite(90);
+        		Deplacements.suivreLigne("white", 6);
+        		Deplacements.rotationDroite(90);
+        		
         		break;
         	
         	case "yellow":
         		Deplacements.suivreLigne("yellow", "blue");
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("yellow", "white");
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("white", 2);
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("black", "blue");
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("black", "white");
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("white", 2);
+        		Deplacements.rotationGauche(90);
+        		Deplacements.suivreLigne("yellow", "blue");
+        		Deplacements.rotationGauche(180);
+        		Deplacements.suivreLigne("yellow", "white");
+        		Deplacements.rotationDroite(90);
+        		Deplacements.suivreLigne("white", 6);
+        		Deplacements.rotationDroite(90);
         		break;
 
         	case "white":

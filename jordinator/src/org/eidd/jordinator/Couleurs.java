@@ -1,5 +1,11 @@
 package org.eidd.jordinator;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.port.Port;
@@ -29,7 +35,51 @@ public class Couleurs {
 		average = new MeanFilter(colorSensor.getRGBMode(), 1);
 		ColorThread thread = new ColorThread();
 		calibrate();
+		saveToFile();
+		//readFromFile();
 		thread.start();
+	}
+	
+	public static void readFromFile() {
+	      try
+	      {
+	         FileInputStream fileIn = new FileInputStream("colors");
+	         ObjectInputStream in = new ObjectInputStream(fileIn);
+	         blue = (float[]) in.readObject();
+	         red = (float[]) in.readObject();
+	         green = (float[]) in.readObject();
+	         yellow = (float[]) in.readObject();
+	         black = (float[]) in.readObject();
+	         white = (float[]) in.readObject();
+	         grey = (float[]) in.readObject();
+	         in.close();
+	         fileIn.close();
+	      }catch(IOException | ClassNotFoundException e)
+	      {
+	         e.printStackTrace();
+	         return;
+	      }
+	}
+	
+	public static void saveToFile() {
+	      try
+	      {
+	         FileOutputStream fileOut = new FileOutputStream("colors");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(blue);
+	         out.writeObject(red);
+	         out.writeObject(green);
+	         out.writeObject(yellow);
+	         out.writeObject(black);
+	         out.writeObject(white);
+	         out.writeObject(grey);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in colors");
+	      }catch(IOException i)
+	      {
+	          i.printStackTrace();
+	      }
 	}
 
 	public static String getColor() {

@@ -1,5 +1,8 @@
 package org.eidd.jordinator;
 
+import java.io.File;
+
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
@@ -27,6 +30,9 @@ public class Pinces {
 	public static void pincer() {
 		pickMotor.rotate(-800);
 		capture = true;
+		File file = new File("OneUp.wav");
+		Sound.setVolume(100);
+		Sound.playSample(file, 100);
 	}
 
 	public static void ouvrir() {

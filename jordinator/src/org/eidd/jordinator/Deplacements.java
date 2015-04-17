@@ -50,6 +50,7 @@ public class Deplacements {
 	private static ShortestPathFinder spf;
 	private static LineMap map;
 	private static PilotProps pp;
+	private static boolean premier = true;
 
 	public static void init() {
     	pp = new PilotProps();
@@ -88,10 +89,10 @@ public class Deplacements {
     	map = new LineMap(lines, bounds);
 	    position = new OdometryPoseProvider(robot);
 
-    	spf = new ShortestPathFinder(map);
-        nav = new Navigator(robot, position);
+    	//spf = new ShortestPathFinder(map);
+       // nav = new Navigator(robot, position);
 	}
-	
+
 	public static void goTo(float x, float y) {
         System.out.println("goTo " + x +":" + y);
         //float startHeading = nav.getPoseProvider().getPose().getHeading();
@@ -220,97 +221,128 @@ public class Deplacements {
 		}
 	}
 	
-	public static void suivreLigne(String c, String c2) {
-		UnregulatedMotor left;
-		UnregulatedMotor right;
-
-		leftMotor.close();
-		rightMotor.close();
-		robot = null;
-
-		left = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_LEFTMOTOR));
-		right = new UnregulatedMotor(LocalEV3.get().getPort(Config.PORT_RIGHTMOTOR));
-		
-		left.forward();
-		right.forward();
+	/*public static void suivreLigne(String c, String c2) {
+		leftMotor.setAcceleration(300);
+		rightMotor.setAcceleration(300);
+		leftMotor.setSpeed(400);
+		rightMotor.setSpeed(400);
+		leftMotor.forward();
+		rightMotor.forward();turnRate
 
 		while(Couleurs.getColor() != c2) {
-			left.setPower(70);
-			right.setPower(70);
+			rightMotor.setSpeed(400);
+			rightMotor.forward();
 			if(Couleurs.getColor() != c) {
-				right.setPower(80);
+				rightMotor.setSpeed(430);
+				rightMotor.forward();
 			}
-			
+
 	    	if(Pinces.capture) {
-	    		left.stop();
-	    		right.stop();
-	        	left.close();
-	        	right.close();
-	        	Deplacements.init();
+	        	robot.setAcceleration(Config.ACCELERATION);
+	    		robot.setTravelSpeed(Config.TRAVEL_SPEED);// cm/sec
+	    		robot.setRotateSpeed(Config.ROTATE_SPEED);// deg/sec
+	    		robot.stop();
 	    		marquer();
+	    		return;
 	    	}
 		}
 
-		left.stop();
-		right.stop();
-    	left.close();
-    	right.close();
-    	//leftMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_LEFTMOTOR, Config.PORT_LEFTMOTOR));
-    	//rightMotor = PilotProps.getMotor(pp.getProperty(PilotProps.KEY_RIGHTMOTOR, Config.PORT_RIGHTMOTOR));
-    	Deplacements.init();
+    	robot.setAcceleration(Config.ACCELERATION);
+		robot.setTravelSpeed(Config.TRAVEL_SPEED);// cm/sec
+		robot.setRotateSpeed(Config.ROTATE_SPEED);// deg/sec
+		robot.stop();
 
     	avancer(15);
     	if(Pinces.capture)
     		marquer();
-	}
+	}*/
 	
-	/*public static void suivreLigne(String c, String c2) {
+	public static void suivreLigne(String c, String c2) {
 		int angle;
-		float duree = 20000;
+		//float duree = 20000;
 
-		long startTime = System.currentTimeMillis();
+		/*long startTime = System.currentTimeMillis();
 		long endTime;
-		long time = 0;
+		long time = 0;*/
 
-		while(time < duree || Distance.obstacle || Couleurs.getColor() != c2) {
+		while(Couleurs.getColor() != c2) {
 			robot.forward();
-			while(Couleurs.getColor() == c);
+			while(Couleurs.getColor() == c) {
+				if(Pinces.capture) {
+					robot.stop();
+					marquer();
+					return;
+				}
+			}
 
 			angle = 2;
-			robot.stop();
 
 			while(Couleurs.getColor() != c) {
+				if(Pinces.capture) {
+					robot.stop();
+					marquer();
+					return;
+				}
 				robot.rotate(angle, true);
 				while(robot.isMoving()) {
 					if(Couleurs.getColor() == c) {
-						nav.stop();
+						robot.stop();
 					}
 				}
 				angle *= -2;
 			}
 
-			endTime = System.currentTimeMillis();
-			time = endTime - startTime;
+			if(Pinces.capture) {
+				robot.stop();
+				marquer();
+				return;
+			}
+
+			//endTime = System.currentTimeMillis();
+			//time = endTime - startTime;
 		}
-		
+
+    	avancer(10);
+    	while(robot.isMoving())
+	    	if(Pinces.capture)
+	    		marquer();
+
 		robot.stop();
-	}*/
+	}
 
 	public static void marquer() {
         System.out.println("Marquer...");
-        rotationGauche(orientation/2);
-        avancer(25);
-        rotationGauche(orientation);
+
+        if(!premier)
+        	rotationGauche(orientation);
+        
+        orientation = 0;
+
+        if(premier) { //on se decale
+            rotationDroite(45);
+            avancer(25);
+            rotationGauche(45);
+            premier = false;
+        }
+
+    	robot.setAcceleration(20);
+		robot.setTravelSpeed(20);// cm/sec
+		robot.setRotateSpeed(20);// deg/sec
+        
 		robot.forward();
 		while(robot.isMoving()) {
-			if(Couleurs.getColor() != "white")
+			if(Couleurs.getColor() == "white")
 				robot.stop();
 		}
 
         robot.travel(25);
         Pinces.ouvrir();
         robot.travel(-10);
-        rotationGauche(180);
+        
+    	robot.setAcceleration(Config.ACCELERATION);
+		robot.setTravelSpeed(Config.TRAVEL_SPEED);// cm/sec
+		robot.setRotateSpeed(Config.ROTATE_SPEED);// deg/sec
+        return;
 	}
 	
 	public static void calibrer() {
